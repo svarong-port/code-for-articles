@@ -86,3 +86,7 @@ hr_data |>
   summarise(AvgPer = mean(Performance),
             EmpCount = n()) |>
   arrange(desc(AvgPer))
+
+hr_data |>
+  filter(Age >= 30 & Department == "IT") |>
+  arrange(desc(Performance))
