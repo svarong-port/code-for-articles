@@ -25,44 +25,37 @@ hr_data <- data.frame(
 # ---------------------------------------
 
 
-# View the dataset
-hr_data
-
-
-# ---------------------------------------
-
-
 # select() example
-select(hr_data, Name, Department, Performance)
+select(hr_data, Name, Department, Engagement)
 
 
 # ---------------------------------------
 
 
 # filter() examples
-filter(hr_data, Department == "HR")
+filter(hr_data, AttritionRisk == "High")
 
-filter(hr_data, Department == "HR" & YearsAtCompany >= 10)
+filter(hr_data, AttritionRisk == "High" & Department == "Finance")
 
 
 # ---------------------------------------
 
 
 # arrange() examples
-arrange(hr_data, Department)
+arrange(hr_data, Engagement)
 
-arrange(hr_data, desc(Department))
+arrange(hr_data, desc(Engagement))
 
 
 # ---------------------------------------
 
 
 # summarise() examples
-summarise(hr_data, mean(Performance))
+summarise(hr_data, mean(Engagement))
 
-summarise(group_by(hr_data, Department), mean(Performance))
-          
-summarise(group_by(hr_data, Department), AvgPer = mean(Performance))
+summarise(group_by(hr_data, AttritionRisk), mean(Engagement))
+
+summarise(group_by(hr_data, AttritionRisk), AvgEng = mean(Engagement))
 
 
 # ---------------------------------------
@@ -77,16 +70,24 @@ mutate(hr_data, YearsUntilRetirement = 60 - Age)
 
 # pipe examples
 
+hr_data |>
+  group_by(AttritionRisk) |>
+  summarise(AvgEng = mean(Engagement))
+
+hr_data |>
+  filter(AttritionRisk == "High") |>
+  arrange(desc(YearsAtCompany), desc(Salary))
+
 hr_data |> 
   group_by(Department) |>
-  summarise(AvgPer = mean(Performance))
-
+  summarise(AvgEng = mean(Engagement),
+            Empcount = n()) |>
+  arrange(desc(AvgEng))
+  
 hr_data |>
   group_by(Department) |>
-  summarise(AvgPer = mean(Performance),
-            EmpCount = n()) |>
-  arrange(desc(AvgPer))
-
-hr_data |>
-  filter(Age >= 30 & Department == "IT") |>
-  arrange(desc(Performance))
+  summarise(HighRiskCount = sum(AttritionRisk == "High"),
+            TotalEmp = n(),
+            HighRiskRatio = (HighRiskCount / TotalEmp) * 100) |>
+  select(Department, HighRiskRatio, TotalEmp, HighRiskCount) |>
+  arrange(desc(HighRiskRatio))
