@@ -64,7 +64,11 @@ print(a)
 
 
 ## list
-grocery_list = list("apple", "milk", TRUE, 250, c(1, 3, 5, 7, 9), list("Walmart", "Target"))
+grocery_list = list("apple",
+                    "milk",
+                    TRUE,
+                    250, c(1, 3, 5, 7, 9),
+                    list("Walmart", "Target"))
 
 print(grocery_list)
 
