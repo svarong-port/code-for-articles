@@ -1,3 +1,8 @@
+-- Chinook dataset
+-- From https://github.com/lerocha/chinook-database/blob/80466f670c4cac735cf3abcc0c7caeeecfb23587/ChinookDatabase/DataSources/Chinook_Sqlite.sql
+
+
+
 -- SELECT
 SELECT Name, AlbumId
 FROM Track;
