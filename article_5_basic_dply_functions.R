@@ -3,6 +3,8 @@
 
 # ---------------------------------------
 
+# Install dply
+install.packages("dplyr")
 
 # Call dplyr
 library(dplyr)
