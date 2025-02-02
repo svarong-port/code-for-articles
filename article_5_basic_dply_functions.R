@@ -11,15 +11,24 @@ library(dplyr)
 # ---------------------------------------
 
 
-# Create dataset
+# Create the dataset
 hr_data <- data.frame(
-  ID = 1:10,
-  Name = c("Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona", "George", "Hannah", "Ian", "Jane"),
-  Department = c("HR", "IT", "Finance", "HR", "Finance", "IT", "HR", "Finance", "IT", "HR"),
-  Age = c(25, 30, 35, 28, 45, 32, 40, 29, 31, 38),
-  YearsAtCompany = c(1, 5, 8, 2, 15, 6, 10, 3, 4, 12),
-  Performance = c(85, 90, 95, 88, 80, 92, 87, 89, 91, 93)
+  ID = 1:15,
+  Name = c("Alice", "Bob", "Carol", "David", "Eve", "Frank", "Grace", 
+           "Henry", "Ivy", "Jack", "Karen", "Liam", "Mona", "Nate", "Olivia"),
+  Department = c("HR", "IT", "Finance", "HR", "Sales", "IT", "Finance", 
+                 "Sales", "IT", "HR", "Finance", "Sales", "IT", "HR", "Sales"),
+  Age = c(34, 29, 45, 50, 27, 30, 42, 35, 31, 40, 38, 28, 33, 55, 26),
+  Engagement = c(85, 70, 65, 55, 90, 75, 60, 88, 80, 50, 68, 72, 78, 40, 95),
+  YearsAtCompany = c(5, 2, 15, 25, 1, 3, 10, 7, 4, 20, 12, 1, 6, 30, 0),
+  AttritionRisk = c("Low", "Medium", "High", "High", "Low", "Medium", "High", 
+                    "Low", "Medium", "High", "High", "Low", "Medium", "High", "Low"),
+  Salary = c(55000, 60000, 70000, 75000, 50000, 62000, 68000, 58000, 
+             61000, 77000, 72000, 51000, 64000, 80000, 49000)
 )
+
+# View dataset
+hr_data
 
 
 # ---------------------------------------
@@ -33,8 +42,11 @@ select(hr_data, Name, Department, Engagement)
 
 
 # filter() examples
+
+## 1 condition
 filter(hr_data, AttritionRisk == "High")
 
+## more than 1 condition
 filter(hr_data, AttritionRisk == "High" & Department == "Finance")
 
 
@@ -42,8 +54,12 @@ filter(hr_data, AttritionRisk == "High" & Department == "Finance")
 
 
 # arrange() examples
+
+## default sorting: ascending
 arrange(hr_data, Engagement)
 
+
+## sort descending
 arrange(hr_data, desc(Engagement))
 
 
@@ -51,10 +67,16 @@ arrange(hr_data, desc(Engagement))
 
 
 # summarise() examples
+
+## summarise() alone
 summarise(hr_data, mean(Engagement))
 
+
+## summarise() + group_by()
 summarise(group_by(hr_data, AttritionRisk), mean(Engagement))
 
+
+## naming output in summarise()
 summarise(group_by(hr_data, AttritionRisk), AvgEng = mean(Engagement))
 
 
@@ -70,20 +92,25 @@ mutate(hr_data, YearsUntilRetirement = 60 - Age)
 
 # pipe examples
 
+## example 1
 hr_data |>
   group_by(AttritionRisk) |>
   summarise(AvgEng = mean(Engagement))
 
+## example 2
 hr_data |>
   filter(AttritionRisk == "High") |>
   arrange(desc(YearsAtCompany), desc(Salary))
 
+
+## example 3
 hr_data |> 
   group_by(Department) |>
   summarise(AvgEng = mean(Engagement),
-            Empcount = n()) |>
+            EmpCount = n()) |>
   arrange(desc(AvgEng))
-  
+
+## example 4
 hr_data |>
   group_by(Department) |>
   summarise(HighRiskCount = sum(AttritionRisk == "High"),
