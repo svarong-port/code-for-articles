@@ -169,10 +169,12 @@ flights[, mean(dep_delay), by = .(origin, dest)]
 
 # 4. Combining and chaining
 
-## 3.1 Combining i, j, by
-## Find the average speed of flights (in miles per hour) for flights with a distance of at least 500 miles, grouped by origin.
-flights[distance >= 500, .(avg_speed = mean(distance / (air_time / 60))), by = origin]
+## 4.1 Combining i, j, by
+flights[distance >= 500, 
+        .(avg_speed = mean(distance / (air_time / 60))), 
+        by = origin]
 
-## 3.2 Chaining
-## Find the top 5 destinations with the highest average departure delay.
-flights[, .(avg_dep_delay = mean(dep_delay)), by = dest][order(-avg_dep_delay)][1:5]
+## 4.2 Chaining
+flights[month == 8,
+        .(avg_arr_delay = mean(arr_delay)),
+        by = dest][order(-avg_arr_delay)][1:5]
