@@ -46,7 +46,7 @@ View(flights)
 
 # 1. Using i
 
-## 1.1 Selecting
+## 1.1 Selecting rows
 
 ### 1.1.1 Selecting 1 row
 flights[5]
@@ -63,7 +63,7 @@ flights[-1]
 flights[!1]
 
 
-## 1.2 Filtering
+## 1.2 Filtering rows
 
 ### 1.2.1 Filtering by 1 condition
 flights[distance >= 500]
@@ -79,6 +79,21 @@ flights[dest %like% "^A"]
 
 ### 1.2.5 %chin%
 flights[dest %chin% c("ATL", "LAX", "ORD")]
+
+
+## 1.3 Sorting rows
+
+### 1.3.1 Sorting in ascending order
+flights[order(origin)]
+
+### 1.3.2 Sorting in descending order
+flights[order(origin, descending = TRUE)]
+
+flights[order(-origin)]
+
+### 1.3.3 Sorting by multiple columns
+flights[ordert(origin, dest)]
+
 
 
 # ---------------------------------------------
@@ -137,7 +152,7 @@ head(flights)
 # 3. Using by
 
 ## 3.1 Group by 1 column
-flights[, mean(dep_delay), by = "origin"]
+flights[, mean(dep_delay), by = origin]
 
 ## 3.2 Group by multiple columns
 flights[, mean(dep_delay), by = c("origin", "dest")]
@@ -154,3 +169,10 @@ flights[, mean(dep_delay), by = .(origin, dest)]
 
 # 4. Combining and chaining
 
+## 3.1 Combining i, j, by
+## Find the average speed of flights (in miles per hour) for flights with a distance of at least 500 miles, grouped by origin.
+flights[distance >= 500, .(avg_speed = mean(distance / (air_time / 60))), by = origin]
+
+## 3.2 Chaining
+## Find the top 5 destinations with the highest average departure delay.
+flights[, .(avg_dep_delay = mean(dep_delay)), by = dest][order(-avg_dep_delay)][1:5]
