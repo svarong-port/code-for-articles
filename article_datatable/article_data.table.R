@@ -49,7 +49,7 @@ View(flights)
 ## 1.1 Selecting
 
 ### 1.1.1 Selecting 1 row
-flights[4]
+flights[5]
 
 ### 1.1.2 Selecting a range of rows
 flights[1:10]
@@ -66,13 +66,13 @@ flights[!1]
 ## 1.2 Filtering
 
 ### 1.2.1 Filtering by 1 condition
-flights[hour >= 20]
+flights[distance >= 500]
 
 ### 1.2.2 Filtering by multiple conditions
-flights[hour >= 20 & origin == "LGA"]
+flights[distance >= 500 & origin == "LGA"]
 
 ### 1.2.3 %between%
-flights[hour %between% c(10, 20)]
+flights[distance %between% c(500, 1000)]
 
 ### 1.2.4 %like%
 flights[dest %like% "^A"]
@@ -91,7 +91,7 @@ flights[dest %chin% c("ATL", "LAX", "ORD")]
 ## 2.1 Selecting columns
 
 ### 2.1.1 Selecting 1 column
-
+flights[, "origin"]
 
 ### 2.1.2 Selecting mulitple columns with vector
 flights[, c("origin", "dest", "air_time")]
@@ -102,13 +102,49 @@ flights[, list(origin, dest, air_time)]
 ### 2.1.4 Selecting mulitple columns with .()
 flights[, .(origin, dest, air_time)]
 
+### 2.1.5 Deselecting
+flights[, -carrier]
+
+flights[, !carrier]
+
+
+## 2.2 Computing
+
+### 2.2.1 Computing 1 statistical value
+flights[, mean(air_time)]
+
+### 2.2.2 Computing multiple statistical value
+flights[, .(mean(air_time), sd(air_time))]
+
+
+## 2.3 Creating columns
+
+### 2.3.1 Creating 1 new column
+flights[, speed := distance / (air_time / 60)]
+
+head(flights)
+
+### 2.3.2 Creating multiple new columns
+flights[, ":="(speed = distance / (air_time / 60),
+               total_delay = dep_delay + arr_delay)]
+
+head(flights)
+
 # ---------------------------------------------
 
 
 
-# Using by
+# 3. Using by
 
+## 3.1 Group by 1 column
+flights[, mean(dep_delay), by = "origin"]
 
+## 3.2 Group by multiple columns
+flights[, mean(dep_delay), by = c("origin", "dest")]
+
+flights[, mean(dep_delay), by = list(origin, dest)]
+
+flights[, mean(dep_delay), by = .(origin, dest)]
 
 
 
@@ -116,5 +152,5 @@ flights[, .(origin, dest, air_time)]
 
 
 
-# Using ...
+# 4. Combining and chaining
 
