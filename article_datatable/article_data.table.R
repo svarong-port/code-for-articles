@@ -31,12 +31,11 @@ View(flights)
 
 # data.table syntax:
 
-## DT[i, j, by, ...]
+## DT[i, j, by]
 
 ## >> i = rows
 ## >> j = columns
 ## >> by = grouping data
-## >> ... = additional arguments
 
 
 
