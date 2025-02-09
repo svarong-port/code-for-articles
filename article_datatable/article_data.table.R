@@ -91,7 +91,7 @@ flights[order(origin, descending = TRUE)]
 flights[order(-origin)]
 
 ### 1.3.3 Sorting by multiple columns
-flights[ordert(origin, dest)]
+flights[order(origin, dest)]
 
 
 
