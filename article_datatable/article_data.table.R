@@ -62,7 +62,7 @@ flights[-1]
 flights[!1]
 
 
-## 1.2 Filtering rows
+## 1.2 Filtering
 
 ### 1.2.1 Filtering by 1 condition
 flights[distance >= 500]
@@ -80,7 +80,7 @@ flights[dest %like% "^A"]
 flights[dest %chin% c("ATL", "LAX", "ORD")]
 
 
-## 1.3 Sorting rows
+## 1.3 Sorting
 
 ### 1.3.1 Sorting in ascending order
 flights[order(origin)]
