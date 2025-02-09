@@ -20,7 +20,7 @@ flights <- fread("flights14.csv")
 ## Preview the dataset
 head(flights)
 
-## View the datast
+## View the dataset
 View(flights)
 
 
