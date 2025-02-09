@@ -14,7 +14,7 @@ library(data.table)
 
 # Import flights
 
-## Import CSV
+## Import CSV: https://raw.githubusercontent.com/Rdatatable/data.table/master/vignettes/flights14.csv
 flights <- fread("flights14.csv")
 
 ## Preview the dataset
