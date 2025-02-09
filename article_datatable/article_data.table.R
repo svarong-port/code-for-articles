@@ -128,7 +128,8 @@ flights[, !carrier]
 flights[, mean(air_time)]
 
 ### 2.2.2 Computing multiple statistical value
-flights[, .(mean(air_time), sd(air_time))]
+flights[, .(avg_air_time = mean(air_time),
+            sd_air_time = sd(air_time))]
 
 
 ## 2.3 Creating columns
