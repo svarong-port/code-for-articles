@@ -14,7 +14,7 @@ library(data.table)
 
 # Import flights
 
-## Import CSV: https://raw.githubusercontent.com/Rdatatable/data.table/master/vignettes/flights14.csv
+## Import CSV
 flights <- fread("flights14.csv")
 
 ## Preview the dataset
@@ -86,7 +86,7 @@ flights[dest %chin% c("ATL", "LAX", "ORD")]
 flights[order(origin)]
 
 ### 1.3.2 Sorting in descending order
-flights[order(origin, descending = TRUE)]
+flights[order(origin, decreasing = TRUE)]
 
 flights[order(-origin)]
 
@@ -107,19 +107,19 @@ flights[order(origin, dest)]
 ### 2.1.1 Selecting 1 column
 flights[, "origin"]
 
-### 2.1.2 Selecting mulitple columns with vector
+### 2.1.2 Selecting multiple columns with vector
 flights[, c("origin", "dest", "air_time")]
 
-### 2.1.3 Selecting mulitple columns with list
+### 2.1.3 Selecting multiple columns with list
 flights[, list(origin, dest, air_time)]
 
-### 2.1.4 Selecting mulitple columns with .()
+### 2.1.4 Selecting multiple columns with .()
 flights[, .(origin, dest, air_time)]
 
 ### 2.1.5 Deselecting
-flights[, -carrier]
+flights[, -c("carrier")]
 
-flights[, !carrier]
+flights[, !c("carrier")]
 
 
 ## 2.2 Computing
@@ -153,6 +153,10 @@ head(flights)
 
 ## 3.1 Group by 1 column
 flights[, mean(dep_delay), by = origin]
+
+flights[order(origin), mean(dep_delay), by = origin]
+
+flights[, mean(dep_delay), by = origin][order(origin)]
 
 ## 3.2 Group by multiple columns
 flights[, mean(dep_delay), by = c("origin", "dest")]
