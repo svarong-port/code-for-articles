@@ -52,6 +52,8 @@ ggplot(penguins, aes(x = body_mass_g,
                      y = flipper_length_mm,
                      color = species)) +
   geom_point() +
+  
+  # Apply classic theme
   theme_classic()
 
 
@@ -69,19 +71,21 @@ ggplot(penguins, aes(x = body_mass_g,
         legend.title = element_text(size = 14),
         legend.text = element_text(size = 12),
         strip.text = element_text(size = 14, face = "bold")) +
-    
-    # Add a title, labels, and a legend
-    labs(title = "Penguin Body Mass vs. Flipper Length",
-         x = "Body Mass (g)",
-         y = "Flipper Length (mm)",
-         color = "Penguin Species") +
-    
-    # Add annotation to each facet
-    annotate("text", x = 3000, y = 225,
-             label = "Larger penguins tend to \n have longer flippers",
-             size = 5,
-             color = "gray",
-             hjust = 0)
+  
+  # Add a title, labels, and a legend
+  labs(title = "Penguin Body Mass vs. Flipper Length",
+       x = "Body Mass (g)",
+       y = "Flipper Length (mm)",
+       color = "Penguin Species") +
+  
+  # Add annotation
+  annotate("text",
+           x = 3000,
+           y = 225,
+           label = "Larger penguins tend to \n have longer flippers",
+           size = 5,
+           color = "gray",
+           hjust = 0)
   
 ## 5.3 Facet
 
@@ -91,6 +95,8 @@ ggplot(penguins, aes(x = body_mass_g,
                      color = species)) +
   geom_point() +
   theme_bw() +
+  
+  # Use facet_wrap()
   facet_wrap(~species)
 
 ### 5.3.2 facet_grid()
@@ -99,4 +105,6 @@ ggplot(penguins, aes(x = body_mass_g,
                      color = species)) +
   geom_point() +
   theme_bw() +
+  
+  # Use facet_grid()
   facet_grid(sex~species)
