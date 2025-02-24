@@ -140,7 +140,7 @@ flights[, speed := distance / (air_time / 60)]
 head(flights)
 
 ### 2.3.2 Creating multiple new columns
-flights[, ":="(speed = distance / (air_time / 60),
+flights[, `:=`(speed = distance / (air_time / 60),
                total_delay = dep_delay + arr_delay)]
 
 head(flights)
