@@ -1,0 +1,77 @@
+# Code for KNN With class Package
+
+
+# Install and load class package
+
+## Install
+install.packages("class")
+
+## Load
+library(class)
+
+
+# Load and preview the dataset
+
+## Load
+data(iris)
+
+## Preview
+head(iris)
+
+
+# Normalise the data
+
+## Define a function for normalisation
+normalise <- function(x) {
+  return((x - min(x)) / max(x) - min(x))
+}
+
+## Apply the function to the dataset
+iris_normalised <- as.data.frame(lapply(iris[, 1:4], normalise))
+
+## Add species column back into the data frame
+iris_normalised$Species <- iris$Species
+
+## Check the results
+summary(iris_normalised)
+
+
+# Split the data
+
+## Set seed for reproducibility
+set.seed(2025)
+
+## Create a training index
+train_index <- sample(1:nrow(iris_normalised),
+                      0.7 * nrow(iris_normalised))
+
+## Split the data
+train_set <- iris_normalised[train_index, ]
+test_set <- iris_normalised[-train_index, ]
+
+
+# Separate features from label
+train_X <- train_set[, 1:4]
+train_Y <- train_set$Species
+
+test_X <- test_set[, 1:4]
+test_Y <- test_set$Species
+
+
+# Train a KNN model
+pred <- knn(train = train_X,
+            test = test_X,
+            cl = train_Y,
+            k = 5)
+
+
+# Evaluate the model
+
+## Load caret package
+library(caret)
+
+## Comute a confusion matrix
+cm <- confusionMatrix(pred, test_Y)
+
+## Print the matrix
+print(cm)
