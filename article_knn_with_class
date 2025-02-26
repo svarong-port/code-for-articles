@@ -71,7 +71,4 @@ pred <- knn(train = train_X,
 library(caret)
 
 ## Comute a confusion matrix
-cm <- confusionMatrix(pred, test_Y)
-
-## Print the matrix
-print(cm)
+confusionMatrix(pred, test_Y)
