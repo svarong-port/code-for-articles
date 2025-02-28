@@ -1,0 +1,47 @@
+# Code for "Intro to dtplyr" Article
+
+# Install the packages
+install.packages("dplyr")
+install.packages("dtplyr")
+install.packages("data.table")
+install.packages("tibble")
+
+# Load the packages
+library(dplyr)
+library(dtplyr)
+library(data.table)
+library(tibble)
+
+# Prepare the dataset
+
+## Load the dataset
+data(mtcars)
+
+## Preview the dataset
+head(mtcars)
+
+## Create a column for car models and re-arrange the columns
+mtcars <- mtcars |>
+  mutate(model = rownames(mtcars)) |>
+  select(model, everything())
+
+## Drop the row index
+rownames(mtcars) <- NULL
+
+## Check the results
+View(mtcars)
+
+## Create a data.table version
+mtcars_dt <- as.data.table(mtcars)
+
+
+# dplyr vs data.table: syntax
+
+## dplyr
+mtcars |>
+  select(model, mpg) |>
+  filter(mpg >= 20) |>
+  arrange(desc(mpg))
+
+## data.table
+mtcars_dt[mpg >= 20, .(model, mpg)][order(-mpg)]
