@@ -5,12 +5,14 @@ install.packages("dplyr")
 install.packages("dtplyr")
 install.packages("data.table")
 install.packages("tibble")
+install.packages("microbenchmark")
 
 # Load the packages
 library(dplyr)
 library(dtplyr)
 library(data.table)
 library(tibble)
+library(microbenchmark)
 
 # Prepare the dataset
 
@@ -45,3 +47,28 @@ mtcars |>
 
 ## data.table
 mtcars_dt[mpg >= 20, .(model, mpg)][order(-mpg)]
+
+
+# dyplr vs data.table: speed
+
+## dplyr
+dplyr_code <- function() {
+              mtcars |>
+                select(model, mpg) |>
+                filter(mpg >= 20) |>
+                arrange(desc(mpg))
+}
+
+## data.table
+data_table_code <- function() {
+  mtcars_dt[mpg >= 20, .(model, mpg)][order(-mpg)]
+}
+
+## Compare speed
+result <- microbenchmark(
+  dplyr = dplyr_code(),
+  data_table = data_table_code(),
+  times = 100
+)
+
+print(result)
