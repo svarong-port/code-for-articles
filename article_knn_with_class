@@ -92,7 +92,6 @@ k_values <- 1:20
 ## Createa a vector for accuracy results
 accuracy_results <- numeric(length(k_values))
 
-
 ## For-loop through the k values
 for (i in seq_along(k_values)) {
   
