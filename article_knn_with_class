@@ -82,3 +82,52 @@ print(cm)
 acc <- sum(diag(cm)) / sum(cm)
 
 cat("Accuracy:", acc)
+
+
+# Bonus: fine-tuning
+
+## Create a set of k values
+k_values <- 1:20
+
+## Createa a vector for accuracy results
+accuracy_results <- numeric(length(k_values))
+
+
+## For-loop through the k values
+for (i in seq_along(k_values)) {
+  
+  ### Set the k value
+  k <- k_values[i]
+  
+  ### Create a KNN model
+  predictions <- knn(train = train_X,
+                     test = test_X,
+                     cl = train_Y,
+                     k = k)
+  
+  ### Create a confusion matrix
+  cm <- table(Predicted = predictions,
+              Actual = test_Y)
+  
+  ### Calculate accuracy
+  accuracy_results[i] <- sum(diag(cm)) / sum(cm)
+}
+
+## Find the best k and the corresponding accuracy
+best_k <- k_values[which.max(accuracy_results)]
+best_accuracy <- max(accuracy_results)
+
+cat(paste("Best k:", best_k),
+    paste("Accuracy:", round(best_accuracy, 2)),
+    sep = "\n")
+
+## Plot the results
+plot(k_values,
+     accuracy_results,
+     type = "b",
+     pch = 19,
+     col = "blue",
+     xlab = "Number of Neighbors (k)",
+     ylab = "Accuracy",
+     main = "KNN Model Accuracy for Different k Values")
+grid()
