@@ -6,6 +6,7 @@ install.packages("dtplyr")
 install.packages("data.table")
 install.packages("tibble")
 install.packages("microbenchmark")
+install.packages("ggplot2")
 
 # Load the packages
 library(dplyr)
@@ -13,6 +14,7 @@ library(dtplyr)
 library(data.table)
 library(tibble)
 library(microbenchmark)
+library(ggplot2)
 
 # Prepare the dataset
 
@@ -53,10 +55,10 @@ mtcars_dt[mpg >= 20, .(model, mpg)][order(-mpg)]
 
 ## dplyr
 dplyr_code <- function() {
-              mtcars |>
-                select(model, mpg) |>
-                filter(mpg >= 20) |>
-                arrange(desc(mpg))
+  mtcars |>
+    select(model, mpg) |>
+    filter(mpg >= 20) |>
+    arrange(desc(mpg))
 }
 
 ## data.table
@@ -72,3 +74,23 @@ result <- microbenchmark(
 )
 
 print(result)
+
+## Visualise the results
+
+### Convert the results to data frame
+result_df <- as.data.frame(result)
+
+str(result_df)
+
+### Visualise
+ggplot(result_df,
+       aes(x = expr,
+           y = time,
+           fill = expr)) +
+  geom_col(alpha = 0.6) +
+  coord_flip() +
+  scale_y_continuous(trans = "log10") +
+  labs(title = "Speed Test: dplyr vs data.table",
+       x = "Code",
+       y = "Execution Time (microseconds)") +
+  theme_light()
