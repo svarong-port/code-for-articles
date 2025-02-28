@@ -25,7 +25,7 @@ head(iris)
 
 ### Define a function for normalisation
 normalise <- function(x) {
-  return((x - min(x)) / max(x) - min(x))
+  return((x - min(x)) / (max(x) - min(x)))
 }
 
 ### Apply the function to the dataset
