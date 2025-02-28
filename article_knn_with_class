@@ -1,7 +1,7 @@
 # Code for KNN With class Package
 
 
-# Install and load class package
+# Step 1. Install and load class package
 
 ## Install
 install.packages("class")
@@ -10,7 +10,7 @@ install.packages("class")
 library(class)
 
 
-# Load and preview the dataset
+# Step 2. Load and preview the dataset
 
 ## Load
 data(iris)
@@ -19,59 +19,66 @@ data(iris)
 head(iris)
 
 
-# Normalise the data
+# Step 3. Prepare the data
 
-## Define a function for normalisation
+## 3.1 Normalise the data
+
+### Define a function for normalisation
 normalise <- function(x) {
   return((x - min(x)) / max(x) - min(x))
 }
 
-## Apply the function to the dataset
+### Apply the function to the dataset
 iris_normalised <- as.data.frame(lapply(iris[, 1:4], normalise))
 
-## Add species column back into the data frame
+### Add species column back into the data frame
 iris_normalised$Species <- iris$Species
 
-## Check the results
+### Check the results
 summary(iris_normalised)
 
 
-# Split the data
+## 3.2 Split the data
 
-## Set seed for reproducibility
+### Set seed for reproducibility
 set.seed(2025)
 
-## Create a training index
+### Create a training index
 train_index <- sample(1:nrow(iris_normalised),
                       0.7 * nrow(iris_normalised))
 
-## Split the data
+### Split the data
 train_set <- iris_normalised[train_index, ]
 test_set <- iris_normalised[-train_index, ]
 
 
-# Separate features from label
+## 3.3 Separate features from label
 
-## X
+### Training set
 train_X <- train_set[, 1:4]
 train_Y <- train_set$Species
 
-## Y
+### Test set
 test_X <- test_set[, 1:4]
 test_Y <- test_set$Species
 
 
-# Train a KNN model
-pred <- knn(train = train_X,
-            test = test_X,
-            cl = train_Y,
-            k = 5)
+# Step 4. Create a KNN model
+predictions <- knn(train = train_X,
+                   test = test_X,
+                   cl = train_Y,
+                   k = 5)
 
 
-# Evaluate the model
+# Step 5. Evaluate the model
 
-## Load caret package
-library(caret)
+## Create a confusion matrix
+cm <- table(Predicted = predictions,
+            Actual = test_Y)
 
-## Comute a confusion matrix
-confusionMatrix(pred, test_Y)
+print(cm)
+
+## Calculate accuracy
+acc <- sum(diag(cm)) / sum(cm)
+
+cat("Accuracy:", acc)
