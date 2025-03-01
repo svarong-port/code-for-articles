@@ -81,7 +81,7 @@ print(cm)
 ## Calculate accuracy
 acc <- sum(diag(cm)) / sum(cm)
 
-cat("Accuracy:", acc)
+cat("Accuracy:", round(acc, 2))
 
 
 # Bonus: fine-tuning
