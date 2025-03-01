@@ -11,17 +11,12 @@ install.packages("dplyr")
 install.packages("dtplyr")
 install.packages("data.table")
 install.packages("tibble")
-install.packages("microbenchmark")
-install.packages("ggplot2")
-install.packages("nycflights13")
 
 ## Load
 library(dplyr)
 library(dtplyr)
 library(data.table)
 library(tibble)
-library(microbenchmark)
-library(ggplot2)
 
 
 # --------------------------
