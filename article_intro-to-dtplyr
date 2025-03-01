@@ -1,96 +1,116 @@
 # Code for "Intro to dtplyr" Article
 
-# Install the packages
+
+# --------------------------
+
+
+# Install and load the packages
+
+## Install
 install.packages("dplyr")
 install.packages("dtplyr")
 install.packages("data.table")
 install.packages("tibble")
 install.packages("microbenchmark")
 install.packages("ggplot2")
+install.packages("nycflights13")
 
-# Load the packages
+## Load
 library(dplyr)
 library(dtplyr)
 library(data.table)
 library(tibble)
 library(microbenchmark)
 library(ggplot2)
-
-# Prepare the dataset
-
-## Load the dataset
-data(mtcars)
-
-## Preview the dataset
-head(mtcars)
-
-## Create a column for car models and re-arrange the columns
-mtcars <- mtcars |>
-  mutate(model = rownames(mtcars)) |>
-  select(model, everything())
-
-## Drop the row index
-rownames(mtcars) <- NULL
-
-## Check the results
-View(mtcars)
-
-## Create a data.table version
-mtcars_dt <- as.data.table(mtcars)
+library(nycflights13)
 
 
-# dplyr vs data.table: syntax
+# --------------------------
+
+
+# Preview the dataset
+
+## Convert flights dataset into data.table object
+flights_dt <- as.data.table(flights)
+
+## View the first 6 rows
+head(flights_dt)
+
+## Glimpse
+glimpse(flights_dt)
+
+
+# --------------------------
+
+
+
+# dplyr vs data.table syntax
 
 ## dplyr
-mtcars |>
-  select(model, mpg) |>
-  filter(mpg >= 20) |>
-  arrange(desc(mpg))
+flights |>
+  select(flight, distance) |>
+  filter(distance >= 1000) |>
+  arrange(desc(distance))
 
 ## data.table
-mtcars_dt[mpg >= 20, .(model, mpg)][order(-mpg)]
+flights_dt[distance >= 1000, .(flight, distance)][order(-distance)]
 
 
-# dyplr vs data.table: speed
+# --------------------------
+
+
+# Working with dtplyr
+
+## Convert flights dataset into lazy data.table object
+flights_ldt <- lazy_dt(flights)
+
+## Execute the syntax
+flights_ldt |>
+  select(flight, distance) |>
+  filter(distance >= 1000) |>
+  arrange(desc(distance)) |>
+  as.data.table()
+
+## Execute the syntax, without as.data.table()
+flights_ldt |>
+  select(flight, distance) |>
+  filter(distance >= 1000) |>
+  arrange(desc(distance))
+
+
+# --------------------------
+
+
+# dyplr speed test
 
 ## dplyr
-dplyr_code <- function() {
-  mtcars |>
-    select(model, mpg) |>
-    filter(mpg >= 20) |>
-    arrange(desc(mpg))
+dplyr_syntax <- function() {
+  flights |>
+    select(flight, distance) |>
+    filter(distance >= 1000) |>
+    arrange(desc(distance))
+}
+
+## dtplyr
+dtplyr_syntax <- function() {
+  flights_ldt |>
+    select(flight, distance) |>
+    filter(distance >= 1000) |>
+    arrange(desc(distance)) |>
+    as.data.table()
 }
 
 ## data.table
-data_table_code <- function() {
-  mtcars_dt[mpg >= 20, .(model, mpg)][order(-mpg)]
+data_table_syntax <- function() {
+  flights_dt[distance >= 1000, .(flight, distance)][order(-distance)]
 }
 
 ## Compare speed
-result <- microbenchmark(
-  dplyr = dplyr_code(),
-  data_table = data_table_code(),
+results <- microbenchmark(
+  dplyr = dplyr_syntax(),
+  dtplyr = dtplyr_syntax(),
+  data_table = data_table_syntax(),
   times = 100
 )
 
-print(result)
-
-## Visualise the results
-
-### Convert the results to data frame
-result_df <- as.data.frame(result)
-
-str(result_df)
-
-### Visualise
-ggplot(result_df,
-       aes(x = expr,
-           y = time,
-           fill = expr)) +
-  geom_col(alpha = 0.6) +
-  coord_flip() +
-  scale_y_continuous(trans = "log10") +
-  labs(title = "Speed Test: dplyr vs data.table",
-       x = "Code",
-       y = "Execution Time (microseconds)") +
-  theme_light()
+print(results)
