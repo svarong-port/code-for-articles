@@ -45,7 +45,7 @@ test_set <- iris[-training_index, ]
 
 # Create a Naive Bayes model
 
-## Create a model
+## Create a NB model
 nb <- naive_bayes(Species ~ .,
                   data = train_set)
 
@@ -53,6 +53,8 @@ nb <- naive_bayes(Species ~ .,
 pred <- predict(nb,
                 newdata = test_set[, 1:4],
                 type = "class")
+
+print(pred)
 
 
 # --------------------------------
