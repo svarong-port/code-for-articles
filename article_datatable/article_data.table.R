@@ -116,6 +116,13 @@ flights[, list(origin, dest, air_time)]
 ### 2.1.4 Selecting multiple columns with .()
 flights[, .(origin, dest, air_time)]
 
+### 2.1.5 Selecting multiple columns with ..
+
+cols <- c("origin", "dest", "air_time")
+
+flights[, ..cols]
+
+
 ### 2.1.5 Deselecting
 flights[, -c("carrier")]
 
