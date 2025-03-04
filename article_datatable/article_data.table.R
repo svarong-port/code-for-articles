@@ -99,7 +99,6 @@ flights[order(origin, dest)]
 
 
 
-
 # 2. Using j
 
 ## 2.1 Selecting columns
@@ -122,8 +121,7 @@ cols <- c("origin", "dest", "air_time")
 
 flights[, ..cols]
 
-
-### 2.1.5 Deselecting
+### 2.1.6 Deselecting
 flights[, -c("carrier")]
 
 flights[, !c("carrier")]
@@ -152,6 +150,8 @@ flights[, `:=`(speed = distance / (air_time / 60),
 
 head(flights)
 
+
+
 # ---------------------------------------------
 
 
@@ -164,6 +164,8 @@ flights[, mean(dep_delay), by = origin]
 flights[order(origin), mean(dep_delay), by = origin]
 
 flights[, mean(dep_delay), by = origin][order(origin)]
+
+flights[, mean(dep_delay), keyby = origin]
 
 ## 3.2 Group by multiple columns
 flights[, mean(dep_delay), by = c("origin", "dest")]
@@ -189,3 +191,30 @@ flights[distance >= 500,
 flights[month == 8,
         .(avg_arr_delay = mean(arr_delay)),
         by = dest][order(-avg_arr_delay)][1:5]
+
+
+
+# ---------------------------------------------
+
+
+
+# 5. Special symbols
+
+## 5.1 .N
+
+### 5.1.1 Select rows
+flights[500:.N]
+
+### 5.1.2 Compute with .N
+flights[, .N, by = origin]
+
+## 5.2 .SD
+flights[,
+        lapply(.SD, max, na.rm = TRUE),
+        by = month]
+
+## 5.3 .SDcols
+flights[,
+        lapply(.SD, max, na.rm = TRUE),
+        by = month,
+        .SDcols = c("arr_delay", "dep_delay")]
