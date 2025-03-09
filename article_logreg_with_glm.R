@@ -61,7 +61,7 @@ y_probs <- predict(logit_model, newdata = data.frame(x_bin = x_vals), type = "re
 p3 <- ggplot(data = data.frame(x_bin, y_bin), aes(x = x_bin, y = y_bin)) +
   geom_point(size = 2, alpha = 0.7) +  # Data points
   geom_line(data = data.frame(x_bin = x_vals, y = y_probs), aes(x = x_bin, y = y), 
-            color = "blue", linewidth = 1) +  # Sigmoid curve
+            color = "red", linewidth = 1) +  # Sigmoid curve
   labs(title = "Logistic Regression for a Binary Outcome",
        x = "Independent Variable (x)",
        y = "Predicted Probability of y = 1") +
@@ -78,7 +78,7 @@ print(p3)  # Binary dataset with logistic regression (good fit)
 
 
 
-# Install and load necessary packages
+# 1. Install and load necessary packages
 
 ## Install
 install.packages("pROC")
@@ -87,11 +87,11 @@ install.packages("pROC")
 library(pROC)
 
 
-# Load the dataset
+# 2. Load the dataset
 data(mtcars)
 
 
-# Prepare the datast
+# 3. Prepare the datast
 
 ## Preview the dataset
 head(mtcars)
@@ -104,11 +104,11 @@ mtcars$am <- factor(mtcars$am,
                     levels = c(0, 1),
                     labels = c("automatic", "manual"))
 
-## Check the results
+## Check the result
 str(mtcars)
 
 
-# Split the data
+# 4. Split the data
 
 ## Set seed for reproducibility
 set.seed(300)
@@ -128,41 +128,58 @@ log_reg <- glm(am ~ .,
                family = "binomial")
 
 
-# Evaluate the model
+# 5. Evaluate the model
 
 ## Get predictive probability
-pred_prob <- predict(log_reg,
-                     newdata = test_set,
-                     type = "response")
+test_set$pred_prob <- predict(log_reg,
+                              newdata = test_set,
+                              type = "response")
 
 ## Predict the outcome
-test_set$pred <- ifelse(pred_prob > 0.5,
-                        1,
-                        0)
+test_set$pred <- ifelse(test_set$pred_prob > 0.5,
+                        1, # if greater -> manual
+                        0) # if lower/equal -> auto
 
-test_set$pred <- as.factor(test_set$pred)
+## Set column `pred ` as factor
+test_set$pred <- factor(test_set$pred,
+                        levels = c(0, 1),
+                        labels = c("automatic", "manual"))
+
+## Check the results
+head(test_set[c("pred_prob", "pred", "am")])
+
 
 ## Create a confusion matrix
 cm <- table(Predicted = test_set$pred,
             Actual = test_set$am)
 
+## Print cm
+print(cm)
+
 ## Compute accuracy
 accuracy <- sum(diag(cm)) / sum(cm)
 
+## Print accuracy
 cat("Accuracy:", round(accuracy, 2))
 
+
 ## Get ROC
+
+### Calcualte ROC
 ROC <- roc(test_set$am,
            pred_prob)
 
-print(ROC)
-
+### Plot ROC
 plot(ROC,
      main = "ROC Curve",
      col = "blue",
      lwd = 2)
 
+
 ## Get AUC
+
+### Calculate AUC
 AUC <- auc(ROC)
 
+### Print AUC
 print(AUC)
