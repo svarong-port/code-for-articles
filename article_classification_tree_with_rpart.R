@@ -40,7 +40,7 @@ str(mtcars)
 # Split the data
 
 ## Set seed for reproducibility
-set.seed(57)
+set.seed(2025)
 
 ## Create train index
 train_index <- sample(nrow(mtcars),
@@ -55,7 +55,7 @@ test_set <- mtcars[-train_index, ]
 
 ## Fit the model
 class_tree <- rpart(am ~ .,
-                    data = mtcars,
+                    data = train_set,
                     method = "class")
 
 ## Visualise the model
@@ -68,11 +68,6 @@ rpart.plot(class_tree)
 test_set$pred <- predict(class_tree,
                          newdata = test_set,
                          type = "class")
-
-## Convert `pred` to factor
-test_set$pred <- factor(test_set$pred,
-                        levels = c(0, 1),
-                        labels = c("automatic", "manual"))
 
 ## Create a confusion matrix
 cm <- table(Predicted = test_set$pred,
