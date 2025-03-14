@@ -31,10 +31,10 @@ summary(rock_scaled)
 # Step 3. Find the optimal k
 
 ## Initialise a vector for within cluster sum of squares (wss)
-wss <- numeric(20)
+wss <- numeric(15)
 
 ## For-loop through the wss
-for (k in 1:20) {
+for (k in 1:15) {
   
   ## Try the k
   km <- kmeans(rock_scaled,
@@ -46,15 +46,15 @@ for (k in 1:20) {
 }
 
 ## Plot the wss
-plot(1:20,
+plot(1:15,
      wss,
      type = "b",
      main = "The Number of Clusters vs WSS",
      xlab = "Number of Clusters",
      ylab = "WSS")
 
-## optiomal k = 5
-k <- 5
+## optiomal k = 4
+k <- 4
 
 
 # ---------------------------------------------
@@ -72,6 +72,9 @@ km <- kmeans(rock_scaled,
 
 ## Print the model
 print(km)
+
+## Print the table
+table(km$cluster)
 
 
 # ---------------------------------------------
