@@ -92,7 +92,7 @@ plot(rock_scaled[, c("shape", "perm")],
 
 ## Add cluster centers
 points(km$centers[, c("shape", "perm")], 
-       col = 1:4,
+       col = 1:5,
        pch = 4,
        cex = 2,
        lwd = 2)
