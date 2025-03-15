@@ -1,6 +1,15 @@
 # Code for k-Means Model in R with kmeans()
 
 
+# Install and Load ggplot for data visualisation
+
+## Install
+install.packages("ggplot2")
+
+## Load
+library(ggplot2)
+
+
 # Step 1. Load the dataset
 
 ## Load
@@ -53,8 +62,8 @@ plot(1:15,
      xlab = "Number of Clusters",
      ylab = "WSS")
 
-## optiomal k = 4
-k <- 4
+## Set optiomal k = 4
+opt_k <- 4
 
 
 # ---------------------------------------------
@@ -67,7 +76,7 @@ set.seed(500)
 
 ## Train the model
 km <- kmeans(rock_scaled,
-             centers = k,
+             centers = opt_k,
              nstart = 20)
 
 ## Print the model
@@ -92,7 +101,7 @@ plot(rock_scaled[, c("shape", "perm")],
 
 ## Add cluster centers
 points(km$centers[, c("shape", "perm")], 
-       col = 1:3,
+       col = 1:4,
        pch = 4,
        cex = 2,
        lwd = 2)
