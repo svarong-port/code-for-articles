@@ -1,15 +1,6 @@
 # Code for k-Means Model in R with kmeans()
 
 
-# Install and Load ggplot for data visualisation
-
-## Install
-install.packages("ggplot2")
-
-## Load
-library(ggplot2)
-
-
 # Step 1. Load the dataset
 
 ## Load
