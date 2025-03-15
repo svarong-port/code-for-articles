@@ -22,6 +22,14 @@ str(rock)
 rock_scaled <- scale(rock)
 
 ## Check the results
+
+### Check mean
+round(colMeans(rock_scaled), 2)
+
+### Check SD
+apply(rock_scaled, 2, sd)
+
+### Summary
 summary(rock_scaled)
 
 
@@ -63,7 +71,7 @@ opt_k <- 4
 # Step 4. Train the model
 
 ## Set see for reproducibility
-set.seed(500)
+set.seed(100)
 
 ## Train the model
 km <- kmeans(rock_scaled,
@@ -110,15 +118,15 @@ library(ggplot2)
 library(dplyr)
 
 ## Step 1: Generate a sample dataset
-set.seed(42)
-n_points <- 30
+set.seed(100)
+n_points <- 100
 df <- data.frame(x = rnorm(n_points, mean = 5, sd = 2),
                  y = rnorm(n_points, mean = 5, sd = 2))
 
 ## Plot Step 1: Original data distribution
 p1 <- ggplot(df, aes(x, y)) +
   geom_point() +
-  ggtitle("Data for Clustering (n = 30)") +
+  ggtitle("Data for Clustering (n = 100)") +
   theme_classic()
 
 print(p1)
