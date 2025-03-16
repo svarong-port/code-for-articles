@@ -72,7 +72,7 @@ attr(dist_matrix, "Labels") <- customers$Name
 
 # Step 3: Perform hierarchical clustering using Ward's method
 hc_ex <- hclust(dist_matrix,
-             method = "ward.D2")
+                method = "ward.D2")
 
 ## Step 4: Plot the dendrogram
 plot(hc_ex,
