@@ -51,6 +51,7 @@ plot(hc,
 
 # -------------------------------------------------
 
+
 # Dendrogram example
 
 ## Load necessary library
