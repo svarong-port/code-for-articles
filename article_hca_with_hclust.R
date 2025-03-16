@@ -42,7 +42,12 @@ hc <- hclust(dm,
 # -------------------------------------------------
 
 
-# Step 4. Plot a dendrogram
+# Step 4. Check the results
+
+## Print HCA
+print(hc)
+
+## Plot a dendrogram
 plot(hc,
      hang = -1,
      cex = 0.8,
