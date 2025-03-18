@@ -47,9 +47,21 @@ biplot(pca)
 pca_var <- pca$sdev^2
 pca_var_exp <- pca_var / sum(pca_var)
 
-### Plot
+### Plot a scree plot for proportion of variance explained
 plot(pca_var_exp,
      type = "b", col = "red", pch = 19, lwd = 2,
      main = "PCA Scree Plot",
      xlab = "Number of Principal Components",
      ylab = "Proportion of Variance Explained")
+
+
+### Compute cumulative variance explained
+cum_var_exp <- cumsum(pca_var_exp)
+
+### Plot a scree plot for cumulative variance explained
+plot(cum_var_exp, 
+     type = "b", col = "blue", pch = 19, lwd = 2,
+     main = "Cumulative Variance Explained",
+     xlab = "Number of Principal Components",
+     ylab = "Cumulative Variance Explained",
+     ylim = c(0, 1))
