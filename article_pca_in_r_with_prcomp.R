@@ -38,22 +38,11 @@ pca <- prcomp(wine[, -1],
 ## Print the results
 summary(pca)
 
-## Plot a biplot
-biplot(pca)
-
 ## Plot a scree plot
 
 ### Extract variance explained
 pca_var <- pca$sdev^2
 pca_var_exp <- pca_var / sum(pca_var)
-
-### Plot a scree plot for proportion of variance explained
-plot(pca_var_exp,
-     type = "b", col = "red", pch = 19, lwd = 2,
-     main = "PCA Scree Plot",
-     xlab = "Number of Principal Components",
-     ylab = "Proportion of Variance Explained")
-
 
 ### Compute cumulative variance explained
 cum_var_exp <- cumsum(pca_var_exp)
