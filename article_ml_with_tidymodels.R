@@ -160,7 +160,7 @@ bt_class <- Boston |>
 
 ## Convert `medv_level` to factor
 bt_class$medv_level <- factor(bt_class$medv_level,
-                             levels = c("high", "low"))
+                              levels = c("high", "low"))
 
 ## Drop `medv`
 bt_class$medv <- NULL
