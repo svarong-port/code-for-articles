@@ -21,7 +21,8 @@ library(readr)
 url <- "https://raw.githubusercontent.com/svarong-port/code-for-articles/refs/heads/main/r/ml_with_tidymodels/bank.csv"
 
 ## Load the dataset with URL
-bank <- read_delim(url, delim = ";")
+bank <- read_delim(url,
+                   delim = ";")
 
 ## Preview
 head(bank)
@@ -132,7 +133,7 @@ y_prob <- predict(ct_fit,
                   type = "prob")
 
 ## Save the results
-ct_results <- tibble(y = bank_test$y,
+ct_results <- tibble(y = bank_test_prep$y,
                      y_pred = y_pred$.pred_class,
                      y_prob_yes = y_prob$.pred_yes,
                      y_prob_no = y_prob$.pred_no)
@@ -167,3 +168,5 @@ roc_auc(ct_results,
 
 
 # ---------------------------------------
+
+
