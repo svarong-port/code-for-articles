@@ -181,3 +181,24 @@ roc_auc(ct_results,
 
 
 # Step 8. Hyperparametre tuning
+
+
+# ---------------------------------------
+
+
+# Step 9. Select the best model
+
+
+
+
+# ---------------------------------------
+
+
+# Step 10. Fit the best model
+
+
+
+# ---------------------------------------
+
+
+# Step 11. Reevaluate the model
