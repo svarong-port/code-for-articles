@@ -155,6 +155,16 @@ print(cf)
 ## Get metrics
 cf |> summary()
 
+## Define metric set
+ct_metrics <- metric_set(accuracy,
+                         sens,
+                         spec)
+
+## Compute the metrics
+ct_metrics(ct_results,
+           truth = y,
+           estimate = y_pred)
+
 ## Plot ROC curve
 roc_curve(ct_results,
           truth = y,
@@ -170,3 +180,4 @@ roc_auc(ct_results,
 # ---------------------------------------
 
 
+# Step 8. Hyperparametre tuning
