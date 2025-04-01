@@ -47,63 +47,61 @@ glimpse(bt)
 # ---------------------------------------
 
 
-# Normal workflow
+# Step 1. Split the data
 
-## Step 1. Split the data
-
-### Set seed for reproducibility
+## Set seed for reproducibility
 set.seed(2025)
 
-### Define the training set index
+## Define the training set index
 bt_split <- initial_split(data = bt,
                           prop = 0.8,
                           strata = medv)
 
-### Create the training set
+## Create the training set
 bt_train <- training(bt_split)
 
-### Create the test set
+## Create the test set
 bt_test <- testing(bt_split)
 
 
 # ---
 
 
-## Step 2. Define the recipe
+# Step 2. Define the recipe
 bt_rec <- recipe(medv ~ .,
                  data = bt_train) |>
   
-  ### Remove near-zero variance predictors
+  ## Remove near-zero variance predictors
   step_nzv(all_numeric_predictors()) |>
   
-  ### Handle multicollinearity
+  ## Handle multicollinearity
   step_corr(all_numeric_predictors(),
             threshold = 0.8) |>
   
-  ### Dummy-code nominal predictors
+  ## Dummy-code nominal predictors
   step_dummy(all_nominal_predictors()) |>
   
-  ### Normalise the predictors
+  ## Normalise the predictors
   step_normalize(all_numeric_predictors()) |>
   
-  ### Log-transform the outcome
+  ## Log-transform the outcome
   step_log(all_outcomes())
 
 
 # ---
 
 
-## Step 3. Prepare and bake
+# Step 3. Prepare and bake
 
-### Prepare
+## Prepare
 bt_rec_prep <- prep(bt_rec,
                     data = bt_train)
 
-### Bake the training set
+## Bake the training set
 bt_train_baked <- bake(bt_rec_prep,
                        new_data = NULL)
 
-### Bake the test set
+## Bake the test set
 bt_test_baked <- bake(bt_rec_prep,
                       new_data = bt_test)
 
@@ -111,20 +109,20 @@ bt_test_baked <- bake(bt_rec_prep,
 # ---
 
 
-## Step 4. Instantiate the model
+# Step 4. Instantiate the model
 dt_model <- decision_tree() |>
   
-  ### Set the engine
+  ## Set the engine
   set_engine("rpart") |>
   
-  ## Set the mode
+  # Set the mode
   set_mode("regression")
 
 
 # ---
 
 
-## Step 5. Fit the model
+# Step 5. Fit the model
 dt_model_fit <- fit(dt_model,
                     medv ~ .,
                     data = bt_train_baked)
@@ -133,14 +131,14 @@ dt_model_fit <- fit(dt_model,
 # ---
 
 
-## Step 6. Make predictions
+# Step 6. Make predictions
 
-### Predict
+## Predict
 pred <- predict(dt_model_fit,
                 new_data = bt_test_baked,
                 type = "numeric")
 
-### Store the results in a tibble
+## Store the results in a tibble
 dt_results <- tibble(actual = bt_test_baked$medv,
                      predicted = pred$.pred)
 
@@ -148,38 +146,38 @@ dt_results <- tibble(actual = bt_test_baked$medv,
 # ---
 
 
-## Step 7. Evaluate the model performance
+# Step 7. Evaluate the model performance
 
-### Define a custom metrics
+## Define a custom metrics
 dt_metrics <- metric_set(mae,
                          rmse)
 
-### Evaluate the model
+## Evaluate the model
 dt_eva_results <- dt_metrics(dt_results,
                              truth = actual,
                              estimate = predicted)
 
-### Print the results
+## Print the results
 dt_eva_results
 
 
 # ---
 
 
-## Step 8. Hyperparametre tuning
+# Step 8. Hyperparametre tuning
 
-### Define the hyperparametres
+## Define the hyperparametres
 dt_model_tune <- decision_tree(cost_complexity = tune(),
                                tree_depth = tune(),
                                min_n = tune()) |>
   
-  #### Set engine
+  ### Set engine
   set_engine("rpart") |>
   
-  #### Set mode
+  ### Set mode
   set_mode("regression")
 
-### Define grid
+## Define grid
 dt_grid <- grid_random(cost_complexity(range = c(-5, 0),
                                        trans = log10_trans()),
                        tree_depth(range = c(1, 20)),
@@ -187,12 +185,12 @@ dt_grid <- grid_random(cost_complexity(range = c(-5, 0),
                        size = 20)
 
 
-### Define cross validation
+## Define cross validation
 dt_cv <- vfold_cv(bt_train_baked,
                   v = 5,
                   strata = medv)
 
-### Tune the model
+## Tune the model
 dt_tune_results <- tune_grid(dt_model_tune,
                              medv ~ .,
                              resamples = dt_cv,
@@ -203,14 +201,14 @@ dt_tune_results <- tune_grid(dt_model_tune,
 # ---
 
 
-## Step 9. Select the best model
+# Step 9. Select the best model
 
-### Show the 5 best models
+## Show the 5 best models
 show_best(dt_tune_results,
           metric = "mae",
           n = 5)
 
-### Select the best model
+## Select the best model
 dt_best_params <- select_best(dt_tune_results,
                               metric = "mae")
 
@@ -218,7 +216,7 @@ dt_best_params <- select_best(dt_tune_results,
 # ---
 
 
-## Step 10. Finalise the best model
+# Step 10. Finalise the best model
 dt_best_model <- finalize_model(dt_model_tune,
                                 dt_best_params)
 
@@ -226,215 +224,25 @@ dt_best_model <- finalize_model(dt_model_tune,
 # ---
 
 
-## Step 11. Fit and evaluate the best model
+# Step 11. Fit and evaluate the best model
 
-### Fit the model
+## Fit the model
 dt_best_fit <- fit(dt_best_model,
                    medv ~ .,
                    data = bt_train_baked)
 
-### Make predictions
+## Make predictions
 pred_best <- predict(dt_best_fit,
                      new_data = bt_test_baked)
 
-### Save the results
+## Save the results
 dt_best_results <- tibble(actual = bt_test_baked$medv,
                           predicted = pred_best$.pred)
 
 ## Evaluate the model
 dt_best_eva_results <- dt_metrics(dt_best_results,
-                                   truth = actual,
-                                   estimate = predicted)
+                                  truth = actual,
+                                  estimate = predicted)
 
 ## Print the results
 dt_best_eva_results
-
-
-# ---------------------------------------
-
-
-# Workflow
-
-## Step 1. Split the data
-
-### Set seed for reproducibility
-set.seed(2025)
-
-### Define the training set index
-bt_split <- initial_split(data = bt,
-                          prop = 0.8,
-                          strata = medv)
-
-### Create the training set
-bt_train <- training(bt_split)
-
-### Create the test set
-bt_test <- testing(bt_split)
-
-
-# ---
-
-
-## Step 2. Define the recipe
-bt_rec <- recipe(medv ~ .,
-                 data = bt_train) |>
-  
-  ### Remove near-zero variance predictors
-  step_nzv(all_numeric_predictors()) |>
-  
-  ### Handle multicollinearity
-  step_corr(all_numeric_predictors(),
-            threshold = 0.8) |>
-  
-  ### Dummy-code nominal predictors
-  step_dummy(all_nominal_predictors()) |>
-  
-  ### Normalise the predictors
-  step_normalize(all_numeric_predictors()) |>
-  
-  ### Log-transform the outcome
-  step_log(all_outcomes())
-
-
-# ---
-
-
-## Step 3. Instantiate the model
-dt_model <- decision_tree() |>
-  
-  ### Set the engine
-  set_engine("rpart") |>
-  
-  ## Set the mode
-  set_mode("regression")
-
-
-# ---
-
-
-## Step 4. Bundle the recipe and the model
-bt_wfl <- workflow() |>
-  
-  ### Add recipe
-  add_recipe(bt_rec) |>
-  
-  ### Add model
-  add_model(dt_model)
-
-
-# ---
-
-
-## Step 5. Fit the model
-dt_last_fit <- last_fit(bt_wfl,
-                        split = bt_split,
-                        metrics = metric_set(mae, rmse))
-
-
-# ---
-
-
-## Step 6. Make predictions
-
-### Collect predictions
-predictions <- collect_predictions(dt_last_fit)
-
-### Print predictions
-predictions
-
-
-# ---
-
-
-## Step 7. Evaluate the model performance
-
-### Collect metrics
-metrics <- collect_metrics(dt_last_fit)
-
-### Print metrics
-metrics
-
-
-# ---
-
-
-## Step 8. Hyperparametre tuning
-
-### Define the tuning parameters
-dt_model_tune <- decision_tree(cost_complexity = tune(),
-                               tree_depth = tune(),
-                               min_n = tune()) |>
-  #### Set engine
-  set_engine("rpart") |>
-  
-  #### Set mode
-  set_mode("regression")
-
-
-### Define the workflow with tuning
-bt_wfl_tune <- workflow() |>
-  
-  #### Add recipe
-  add_recipe(bt_rec) |>
-  
-  #### Add model
-  add_model(dt_model_tune)
-
-### Define the grid for tuning
-dt_grid <- grid_random(cost_complexity(range = c(-5, 0), trans = log10_trans()),
-                       tree_depth(range = c(1, 20)),
-                       min_n(range = c(2, 50)),
-                       size = 20)
-
-### Cross-validation for tuning
-dt_cv <- vfold_cv(bt_train, v = 5, strata = medv)
-
-### Tune the model
-dt_tune_results <- tune_grid(bt_wfl_tune,
-                             resamples = dt_cv,
-                             grid = dt_grid,
-                             metrics = metric_set(mae, rmse))
-
-
-# ---
-
-
-## Step 9. Select and fit the best model
-
-### Show the best model
-show_best(dt_tune_results,
-          metric = "mae",
-          n = 5)
-
-### Finalise the best workflow
-dt_wkl_best <- finalize_workflow(bt_wfl_tune,
-                                 dt_best_params)
-
-### Fit the best model
-dt_best_fit <- last_fit(dt_wkl_best,
-                        split = bt_split,
-                        metrics = metric_set(mae, rmse))
-
-
-# ---
-
-
-## Step 10. Collect predictions and metrics
-
-### Collect predictions
-predictions_best <- collect_predictions(dt_best_fit)
-
-### Print predictions
-predictions_best
-
-
-# ---
-
-
-## Step 7. Evaluate the model performance
-
-### Collect metrics
-metrics_best <- collect_metrics(dt_best_fit)
-
-### Print metrics
-metrics_best
