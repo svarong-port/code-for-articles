@@ -1,4 +1,4 @@
-# Code for Machine Learning With tidymodels (Regression)
+# Code for Machine Learning With tidymodels (Regression - Normal Flow)
 
 
 # Install and load packages
