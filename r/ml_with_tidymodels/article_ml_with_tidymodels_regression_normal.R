@@ -32,7 +32,7 @@ glimpse(Boston)
 
 # Prepare the data for regression task
 
-## Create a new data
+## Create a new dataset
 bt <- Boston
 
 ## Convert `chas` to factor
@@ -133,14 +133,14 @@ dt_model_fit <- fit(dt_model,
 
 # Step 6. Make predictions
 
-## Predict
-pred <- predict(dt_model_fit,
-                new_data = bt_test_baked,
-                type = "numeric")
+## Make predictions
+dt_results <- predict(dt_model_fit,
+                      new_data = bt_test_baked,
+                      type = "numeric") |>
+  bind_cols(medv = bt_test_baked$medv)
 
-## Store the results in a tibble
-dt_results <- tibble(actual = bt_test_baked$medv,
-                     predicted = pred$.pred)
+## Print the results
+dt_results
 
 
 # ---
@@ -154,8 +154,8 @@ dt_metrics <- metric_set(mae,
 
 ## Evaluate the model
 dt_eva_results <- dt_metrics(dt_results,
-                             truth = actual,
-                             estimate = predicted)
+                             truth = medv,
+                             estimate = .pred)
 
 ## Print the results
 dt_eva_results
@@ -167,15 +167,21 @@ dt_eva_results
 # Step 8. Hyperparametre tuning
 
 ## Define the hyperparametres
-dt_model_tune <- decision_tree(cost_complexity = tune(),
-                               tree_depth = tune(),
-                               min_n = tune()) |>
+dt_tune <- decision_tree(cost_complexity = tune(),
+                         tree_depth = tune(),
+                         min_n = tune()) |>
   
   ### Set engine
   set_engine("rpart") |>
   
   ### Set mode
   set_mode("regression")
+
+## Define cross validation
+dt_cv <- vfold_cv(bt_train_baked,
+                  v = 5,
+                  strata = medv)
+
 
 ## Define grid
 dt_grid <- grid_random(cost_complexity(range = c(-5, 0),
@@ -184,14 +190,8 @@ dt_grid <- grid_random(cost_complexity(range = c(-5, 0),
                        min_n(range = c(2, 50)),
                        size = 20)
 
-
-## Define cross validation
-dt_cv <- vfold_cv(bt_train_baked,
-                  v = 5,
-                  strata = medv)
-
 ## Tune the model
-dt_tune_results <- tune_grid(dt_model_tune,
+dt_tune_results <- tune_grid(dt_tune,
                              medv ~ .,
                              resamples = dt_cv,
                              grid = dt_grid,
@@ -217,7 +217,7 @@ dt_best_params <- select_best(dt_tune_results,
 
 
 # Step 10. Finalise the best model
-dt_best_model <- finalize_model(dt_model_tune,
+dt_best_model <- finalize_model(dt_tune,
                                 dt_best_params)
 
 
@@ -232,17 +232,21 @@ dt_best_fit <- fit(dt_best_model,
                    data = bt_train_baked)
 
 ## Make predictions
-pred_best <- predict(dt_best_fit,
-                     new_data = bt_test_baked)
-
-## Save the results
-dt_best_results <- tibble(actual = bt_test_baked$medv,
-                          predicted = pred_best$.pred)
+dt_best_results <- predict(dt_best_fit,
+                           new_data = bt_test_baked) |>
+  bind_cols(medv = bt_test_baked$medv)
 
 ## Evaluate the model
 dt_best_eva_results <- dt_metrics(dt_best_results,
-                                  truth = actual,
-                                  estimate = predicted)
+                                  truth = medv,
+                                  estimate = .pred)
 
 ## Print the results
 dt_best_eva_results
+
+## Compare the models
+bind_rows(initial_model = dt_eva_results,
+          tuned_model = dt_best_eva_results,
+          .id = "model") |>
+  tidyr::pivot_wider(names_from = .metric,
+                     values_from = .estimate)
