@@ -32,7 +32,7 @@ glimpse(Boston)
 
 # Prepare the data for regression task
 
-## Create a new data
+## Create a new dataset
 bt <- Boston
 
 ## Convert `chas` to factor
@@ -172,14 +172,14 @@ bt_wfl_tune <- workflow() |>
   ### Add model
   add_model(dt_model_tune)
 
+## Cross-validation for tuning
+dt_cv <- vfold_cv(bt_train, v = 5, strata = medv)
+
 ## Define the grid for tuning
 dt_grid <- grid_random(cost_complexity(range = c(-5, 0), trans = log10_trans()),
                        tree_depth(range = c(1, 20)),
                        min_n(range = c(2, 50)),
                        size = 20)
-
-## Cross-validation for tuning
-dt_cv <- vfold_cv(bt_train, v = 5, strata = medv)
 
 ## Tune the model
 dt_tune_results <- tune_grid(bt_wfl_tune,
@@ -230,3 +230,14 @@ metrics_best <- collect_metrics(dt_best_fit)
 
 ## Print metrics
 metrics_best
+
+
+# ---
+
+
+# Step 8. Compare the model
+bind_rows(initial_model = metrics,
+          tuned_model = metrics_best,
+          .id = "model") |>
+  tidyr::pivot_wider(names_from = .metric,
+                     values_from = .estimate)
