@@ -173,7 +173,9 @@ bt_wfl_tune <- workflow() |>
   add_model(dt_model_tune)
 
 ## Cross-validation for tuning
-dt_cv <- vfold_cv(bt_train, v = 5, strata = medv)
+dt_cv <- vfold_cv(bt_train,
+                  v = 5,
+                  strata = medv)
 
 ## Define the grid for tuning
 dt_grid <- grid_random(cost_complexity(range = c(-5, 0), trans = log10_trans()),
@@ -197,6 +199,10 @@ dt_tune_results <- tune_grid(bt_wfl_tune,
 show_best(dt_tune_results,
           metric = "mae",
           n = 5)
+
+## Select the best model
+dt_best_params <- select_best(dt_tune_results,
+                              metric = "mae")
 
 ## Finalise the best workflow
 dt_wkl_best <- finalize_workflow(bt_wfl_tune,
@@ -235,7 +241,7 @@ metrics_best
 # ---
 
 
-# Step 8. Compare the model
+# Step 8. Compare the models
 bind_rows(initial_model = metrics,
           tuned_model = metrics_best,
           .id = "model") |>
