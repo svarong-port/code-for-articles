@@ -244,7 +244,11 @@ dt_best_eva_results <- dt_metrics(dt_best_results,
 ## Print the results
 dt_best_eva_results
 
-## Compare the models
+
+# ---
+
+
+# Step 12. Compare the models
 bind_rows(initial_model = dt_eva_results,
           tuned_model = dt_best_eva_results,
           .id = "model") |>
