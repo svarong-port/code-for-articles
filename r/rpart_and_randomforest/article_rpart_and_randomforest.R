@@ -90,8 +90,8 @@ rpart.plot(ct,
 
 ### Predict the outcome
 test_set$pred_ct <- predict(ct,
-                          newdata = test_set,
-                          type = "class")
+                            newdata = test_set,
+                            type = "class")
 
 
 ### Create a confusion matrix
