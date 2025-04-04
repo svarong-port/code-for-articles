@@ -5,7 +5,7 @@
 
 ## Install
 install.packages("ggplot2") # for diamonds dataset
-install.packages("dplyr")
+install.packages("dplyr") # for data manipulation
 
 ## Load
 library(ggplot2)
