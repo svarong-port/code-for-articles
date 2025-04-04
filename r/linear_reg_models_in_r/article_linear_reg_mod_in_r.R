@@ -17,21 +17,15 @@ library(dplyr)
 
 # Prepare the dataset
 
-## Load the dataset
-data(diamonds)
-
-## View the structure
-glimpse(diamonds)
-
-
-## Subset the dataset
-
 ### Set seed for reproducibility
 set.seed(2019)
 
 ### Create sample of 3000 from diamonds
 dm <- sample_n(diamonds,
                3000)
+
+### View the structure
+glimpse(dm)
 
 
 ## Check the distribution of `price`
@@ -98,9 +92,6 @@ mae <- mean(abs(pred - test_set$price))
 ## Calculate RMSE
 rmse <- sqrt(mean((pred - test_set$price)^2))
 
-## Save the results
-results <- data.frame(metrics = c("MAE", "RMSE"),
-                      values = c(mae, rmse))
-
-## Show the results
-results
+## Print the results
+cat("MAE:", mae)
+cat("RMSE:", rmse)
