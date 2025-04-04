@@ -17,6 +17,8 @@ library(dplyr)
 
 # Prepare the dataset
 
+## Subset the dataset
+
 ### Set seed for reproducibility
 set.seed(2019)
 
@@ -28,33 +30,52 @@ dm <- sample_n(diamonds,
 glimpse(dm)
 
 
+## Dummy code categorical variables
+
+### Set option to dummy coding
+options(contrasts = c("contr.treatment",
+                      "contr.treatment"))
+
+### Dummy code
+cat_dum <- model.matrix(~ cut + color + clarity,
+                        data = dm)[, -1]
+
+### Combine dummy-coded categorical and numeric variables
+dm_prep <- cbind(dm |> select(carat, depth, table, x, y, z),
+                 cat_dum,
+                 price = dm$price)
+
+## Check the results
+glimpse(dm_prep)
+
+
 ## Check the distribution of `price`
-ggplot(dm, aes(x = price)) +
+ggplot(dm_prep, aes(x = price)) +
   geom_histogram()
 
 ## Check the distribution of log `price`
-ggplot(dm, aes(x = log(price))) +
+ggplot(dm_prep, aes(x = log(price))) +
   geom_histogram()
 
 
 ## Split the data
 
 ### Training index
-train_index <- sample(nrow(dm),
-                      0.8 * nrow(dm))
+train_index <- sample(nrow(dm_prep),
+                      0.8 * nrow(dm_prep))
 
 ### Create training set
-train_set <- dm[train_index, ]
+train_set <- dm_prep[train_index, ]
 
 ### Create test set
-test_set <- dm[-train_index, ]
+test_set <- dm_prep[-train_index, ]
 
 
 # --------------------------------------------------
 
 
 # Fit the model
-linear_reg <- lm(log(price) ~ carat + cut + table,
+linear_reg <- lm(log(price) ~ .,
                  data = train_set)
 
 # View the model
