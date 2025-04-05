@@ -17,6 +17,9 @@ library(dplyr)
 
 # Prepare the dataset
 
+# Preview the dataset
+head(diamonds)
+
 ## Subset the dataset
 
 ### Set seed for reproducibility
@@ -30,17 +33,17 @@ dm <- sample_n(diamonds,
 glimpse(dm)
 
 
-## Dummy code categorical variables
+## Dummy encode categorical variables
 
-### Set option to dummy coding
+### Set option to dummy encoding
 options(contrasts = c("contr.treatment",
                       "contr.treatment"))
 
-### Dummy code
+### Dummy encode
 cat_dum <- model.matrix(~ cut + color + clarity,
                         data = dm)[, -1]
 
-### Combine dummy-coded categorical and numeric variables
+### Combine dummy-encoded categorical and numeric variables
 dm_prep <- cbind(dm |> select(carat, depth, table, x, y, z),
                  cat_dum,
                  price = dm$price)
@@ -92,14 +95,8 @@ pred_log <- predict(linear_reg,
                     newdata = test_set,
                     type = "response")
 
-## Print the results
-pred_log
-
 ## Predict in the outcome space
 pred <- exp(pred_log)
-
-## Print the results
-pred
 
 
 # --------------------------------------------------
