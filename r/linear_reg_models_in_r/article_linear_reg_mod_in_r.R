@@ -17,7 +17,7 @@ library(dplyr)
 
 # Prepare the dataset
 
-# Preview the dataset
+## Preview the dataset
 head(diamonds)
 
 ## Subset the dataset
