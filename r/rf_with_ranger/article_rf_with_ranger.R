@@ -1,6 +1,5 @@
 # Code for Random Forest With ranger Package
 
-
 # Install and load
 
 ## Install
@@ -46,7 +45,6 @@ for (col in chr_cols) {
   mpg[[col]] <- as.factor(mpg[[col]])
 }
 
-
 ## Check the results
 str(mpg)
 
@@ -80,8 +78,7 @@ set.seed(123)
 
 ## Train the model
 rf_model <- ranger(hwy ~ .,
-                   data = train,
-                   importance = "permutation")
+                   data = train)
 
 ## Print the model
 rf_model
@@ -109,6 +106,18 @@ r_sq <- 1 - (sum((errors)^2) / sum((test$hwy - mean(test$hwy))^2))
 cat("Initial model MSE:", round(mse, 2), "\n")
 cat("Initial model RMSE:", round(rmse, 2), "\n")
 cat("Initial model R squared:", round(r_sq, 2), "\n")
+
+
+## Get variabe importance
+vip(rf_model)  +
+  
+  ## Add title and labels
+  labs(title = "Variable Importance - Initial Random Forest Model",
+       x = "Variables",
+       y = "Importance") +
+  
+  ## Set theme to minimal
+  theme_minimal()
 
 
 # ------------------------------------------------------------------
@@ -149,7 +158,6 @@ for (i in 1:nrow(grid)) {
   preds <- predict(model,
                    data = test)$predictions
   
-  
   ## Get errors
   errors <- test$hwy - preds
   
@@ -175,8 +183,14 @@ ggplot(hpt_results,
        aes(x = mtry,
            y = RMSE,
            color = factor(num.trees))) +
-  geom_point(aes(size = min.node.size)) +
+  
+  ## Use scatter plot
+  geom_point(aes(size = min.node.size), alpha = 0.7) +
+  
+  ## Set theme to minimal
   theme_minimal() +
+  
+  ## Add title, labels, and legends
   labs(title = "Hyperparametre Tuning Results",
        x = "mtry",
        y = "RMSE",
@@ -193,8 +207,7 @@ rf_model_new <- ranger(hwy ~ .,
                        data = train,
                        num.tree = best_num.tree,
                        mtry = best_mtry,
-                       min.node.size = best_min.node.size,
-                       importance = "permutation")
+                       min.node.size = best_min.node.size)
 
 ## Evaluate the model
 
@@ -229,9 +242,24 @@ model_comp <- data.frame(Model = c("Initial", "Final"),
 ## Print
 model_comp
 
+
 ## Get variabe importance
+
+## Fit the model with importance
+rf_model_new <- ranger(hwy ~ .,
+                       data = train,
+                       num.tree = best_num.tree,
+                       mtry = best_mtry,
+                       min.node.size = best_min.node.size,
+                       importance = "permutation")
+
+## Get variable importance
 vip(rf_model_new)  +
-  labs(title = "Variable Importance - Random Forest Model",
+  
+  ## Add title and labels
+  labs(title = "Variable Importance - Final Random Forest Model",
        x = "Variables",
        y = "Importance") +
+  
+  ## Set theme to minimal
   theme_minimal()
