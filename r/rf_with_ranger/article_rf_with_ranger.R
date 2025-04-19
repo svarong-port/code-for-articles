@@ -185,7 +185,8 @@ ggplot(hpt_results,
            color = factor(num.trees))) +
   
   ## Use scatter plot
-  geom_point(aes(size = min.node.size), alpha = 0.7) +
+  geom_point(aes(size = min.node.size),
+             alpha = 0.7) +
   
   ## Set theme to minimal
   theme_minimal() +
