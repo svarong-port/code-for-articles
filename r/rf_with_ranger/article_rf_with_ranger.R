@@ -1,5 +1,6 @@
 # Code for Random Forest With ranger Package
 
+
 # Install and load
 
 ## Install
@@ -102,7 +103,7 @@ mse <- mean((errors)^2)
 rmse <- sqrt(mse)
 
 ## Calculate R squared
-r_sq <- 1 - (sum((errors)^2) / sum((test_set$hwy - mean(test_set$hwy))^2))
+r_sq <- 1 - (sum((errors)^2) / sum((test$hwy - mean(test$hwy))^2))
 
 ## Print the results
 cat("Initial model MSE:", round(mse, 2), "\n")
@@ -211,7 +212,7 @@ mse_new <- mean((errors_new)^2)
 rmse_new <- sqrt(mse_new)
 
 ## Calculate R squared
-r_sq_new <- 1 - (sum((errors_new)^2) / sum((test_set$hwy - mean(test_set$hwy))^2))
+r_sq_new <- 1 - (sum((errors_new)^2) / sum((test$hwy - mean(test$hwy))^2))
 
 ## Print the results
 cat("Final model MSE:", round(mse_new, 2), "\n")
