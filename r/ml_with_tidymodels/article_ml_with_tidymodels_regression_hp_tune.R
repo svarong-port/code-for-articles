@@ -60,9 +60,6 @@ bt_split <- initial_split(data = bt,
 ## Create the training set
 bt_train <- training(bt_split)
 
-## Create the test set
-bt_test <- testing(bt_split)
-
 
 # ---------------------------------------
 
