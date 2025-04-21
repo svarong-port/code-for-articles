@@ -103,27 +103,32 @@ bt_wfl_tune <- workflow() |>
   add_model(dt_model_tune)
 
 
-## Cross-validation for tuning
-dt_cv <- vfold_cv(bt_train,
-                  v = 5,
-                  strata = medv)
+## Set k-fold cross-validation for tuning
+hpt_cv <- vfold_cv(bt_train,
+                   v = 5,
+                   strata = medv)
 
 
 ## Set seed for reproducibility
 set.seed(2025)
 
 ## Define the grid for tuning
-dt_grid <- grid_random(cost_complexity(range = c(-5, 0), trans = log10_trans()),
-                       tree_depth(range = c(1, 20)),
-                       min_n(range = c(2, 50)),
-                       size = 20)
+hpt_grid <- grid_random(cost_complexity(range = c(-5, 0), trans = log10_trans()),
+                        tree_depth(range = c(1, 20)),
+                        min_n(range = c(2, 50)),
+                        size = 20)
+
+
+## Define metrics
+hpt_metrics = metric_set(mae,
+                         rmse)
 
 
 ## Tune the model
 dt_tune_results <- tune_grid(bt_wfl_tune,
-                             resamples = dt_cv,
-                             grid = dt_grid,
-                             metrics = metric_set(mae, rmse))
+                             resamples = hpt_cv,
+                             grid = hpt_grid,
+                             metrics = hpt_metrics)
 
 
 # ---------------------------------------
