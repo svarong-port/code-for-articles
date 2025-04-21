@@ -72,8 +72,8 @@ test_set$pred_prob <- predict(log_reg,
 
 ## Predict the outcome
 test_set$pred <- ifelse(test_set$pred_prob > 0.5,
-                        1, # if greater -> manual
-                        0) # if lower/equal -> auto
+                        1,
+                        0)
 
 ## Set column `pred ` as factor
 test_set$pred <- factor(test_set$pred,
