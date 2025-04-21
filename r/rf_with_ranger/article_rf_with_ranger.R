@@ -93,17 +93,17 @@ preds <- predict(rf_model,
 ## Get errors
 errors <- test$hwy - preds
 
-## Calculate MSE
-mse <- mean((errors)^2)
+## Calculate MAE
+mae <- mean(abs(errors))
 
 ## Calculate RMSE
-rmse <- sqrt(mse)
+rmse <- sqrt(mean(errors^2))
 
 ## Calculate R squared
 r_sq <- 1 - (sum((errors)^2) / sum((test$hwy - mean(test$hwy))^2))
 
 ## Print the results
-cat("Initial model MSE:", round(mse, 2), "\n")
+cat("Initial model MAE:", round(mae, 2), "\n")
 cat("Initial model RMSE:", round(rmse, 2), "\n")
 cat("Initial model R squared:", round(r_sq, 2), "\n")
 
@@ -161,16 +161,16 @@ for (i in 1:nrow(grid)) {
   ## Get errors
   errors <- test$hwy - preds
   
-  ## Calculate MSE
-  mse <- mean(errors^2)
+  ## Calculate MAE
+  mae <- mean(abs(errors))
   
   ## Calculate RMSE
-  rmse <- sqrt(mse)
+  rmse <- sqrt(mean(errors^2))
   
   ## Store the results
   hpt_results <- rbind(hpt_results,
                        cbind(params,
-                             MSE = mse,
+                             MAE = mae,
                              RMSE = rmse))
 }
 
@@ -219,24 +219,24 @@ preds_new <- predict(rf_model_new,
 ## Get errors
 errors_new <- test$hwy - preds_new
 
-## Calculate MSE
-mse_new <- mean((errors_new)^2)
+## Calculate MAE
+mae_new <- mean(abs(errors_new))
 
 ## Calculate RMSE
-rmse_new <- sqrt(mse_new)
+rmse_new <- sqrt(mean(errors_new^2))
 
 ## Calculate R squared
 r_sq_new <- 1 - (sum((errors_new)^2) / sum((test$hwy - mean(test$hwy))^2))
 
 ## Print the results
-cat("Final model MSE:", round(mse_new, 2), "\n")
+cat("Final model MAE:", round(mae_new, 2), "\n")
 cat("Final model RMSE:", round(rmse_new, 2), "\n")
 cat("Final model R squared:", round(r_sq_new, 2), "\n")
 
 
 ## Compare the two models
 model_comp <- data.frame(Model = c("Initial", "Final"),
-                         MSE = c(round(mse, 2), round(mse_new, 2)),
+                         MAE = c(round(mae, 2), round(mae_new, 2)),
                          RMSE = c(round(rmse, 2), round(rmse_new, 2)),
                          R_Squared = c(round(r_sq, 2), round(r_sq_new, 2)))
 
@@ -252,13 +252,13 @@ rf_model_new <- ranger(hwy ~ .,
                        num.tree = best_num.tree,
                        mtry = best_mtry,
                        min.node.size = best_min.node.size,
-                       importance = "permutation")
+                       importance = "permutation") # Add importance
 
 ## Get variable importance
 vip(rf_model_new)  +
   
   ## Add title and labels
-  labs(title = "Variable Importance - Final Random Forest Model",
+  labs(title = "Variable Importance – Final Random Forest Model",
        x = "Variables",
        y = "Importance") +
   
