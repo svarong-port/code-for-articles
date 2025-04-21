@@ -60,9 +60,12 @@ if (length(nvz_vars) > 0) {
   
   ## Print a confirmation message
   print("Near-zero variance variables removed.")
+  
 } else {
+  
   ## Print a help text
   print("No near-zero variance variables found.")
+  
 }
 
 ## Check the results
