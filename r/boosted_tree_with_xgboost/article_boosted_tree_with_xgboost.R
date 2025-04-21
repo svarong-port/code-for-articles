@@ -146,7 +146,7 @@ ggplot(data.frame(actual = y_test,
   ## Add line
   geom_abline(slope = 1,
               intercept = 0,
-              color = "darkblue") +
+              color = "red") +
   
   ## Add error lines
   geom_segment(aes(x = actual,
