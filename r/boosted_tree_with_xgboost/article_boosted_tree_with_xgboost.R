@@ -124,31 +124,14 @@ xgb_model <- xgb.train(params = hp,
                        verbose = 1)
 
 
+# --------------------------------------------------
+
 
 ## Evaluate the model
 
 ## Make predictions
 y_pred <- predict(xgb_model,
                   x_test)
-
-## Calculate errors
-errors <- y_test - y_pred
-
-## Calculate MAE
-mae <- mean(abs(errors))
-
-## Calculate RMSE
-rmse <- sqrt(mean((errors)^2))
-
-## Calculate R-squared
-ss_res <- sum((errors)^2)
-ss_tot <- sum((y_test - mean(y_test))^2)
-r_squared <- 1 - (ss_res / ss_tot)
-
-## Print the results
-cat("MAE:", round(mae, 2), "\n")
-cat("RMSE:", round(rmse, 2), "\n")
-cat("R-squared:", round(r_squared, 2), "\n")
 
 ## Visualise the predictions
 ggplot(data.frame(actual = y_test,
@@ -180,3 +163,23 @@ ggplot(data.frame(actual = y_test,
   
   ## Set theme to minimal
   theme_minimal()
+
+
+## Calculate errors
+errors <- y_test - y_pred
+
+## Calculate MAE
+mae <- mean(abs(errors))
+
+## Calculate RMSE
+rmse <- sqrt(mean((errors)^2))
+
+## Calculate R-squared
+ss_res <- sum((errors)^2)
+ss_tot <- sum((y_test - mean(y_test))^2)
+r_squared <- 1 - (ss_res / ss_tot)
+
+## Print the results
+cat("MAE:", round(mae, 2), "\n")
+cat("RMSE:", round(rmse, 2), "\n")
+cat("R-squared:", round(r_squared, 2), "\n")
