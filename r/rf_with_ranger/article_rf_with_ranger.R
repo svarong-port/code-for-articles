@@ -24,7 +24,7 @@ data(mpg)
 ## Preview
 head(mpg)
 
-## View the tructure
+## View the structure
 str(mpg)
 
 
