@@ -100,7 +100,7 @@ cat("Accuracy:", round(accuracy, 2))
 
 ## Get ROC
 
-### Calcualte ROC
+### Calculate ROC
 ROC <- roc(test_set$am,
            pred_prob)
 
