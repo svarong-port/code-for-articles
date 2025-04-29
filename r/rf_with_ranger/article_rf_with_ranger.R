@@ -198,7 +198,7 @@ ggplot(hpt_results,
        color = "num.trees",
        size = "min.node.size")
 
-## Get the best hyperparametres
+## Define the best hyperparametres
 best_num.tree <- 300
 best_mtry <- 4
 best_min.node.size <- 2.5
