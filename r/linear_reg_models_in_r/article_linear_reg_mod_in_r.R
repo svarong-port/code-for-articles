@@ -47,15 +47,27 @@ glimpse(dm)
 ## Check the distribution of `price`
 ggplot(dm,
        aes(x = price)) +
-  geom_histogram()
+  geom_histogram(binwidth = 100)
 
 ## Check the distribution of log `price`
 ggplot(dm,
        aes(x = log(price))) +
   geom_histogram()
 
+## Log-transform `price`
+dm$price_log <- log(dm$price)
+
+## Drop `price`
+dm$price <- NULL
+
+## Check the results
+glimpse(dm)
+
 
 ## Split the data
+
+## Set seed for reproducibility
+set.seed(181)
 
 ### Training index
 train_index <- sample(nrow(dm),
@@ -72,7 +84,7 @@ test_set <- dm[-train_index, ]
 
 
 # Fit the model
-linear_reg <- lm(log(price) ~ .,
+linear_reg <- lm(price_log ~ .,
                  data = train_set)
 
 # View the model
@@ -93,7 +105,7 @@ pred_log <- predict(linear_reg,
 pred <- exp(pred_log)
 
 ## Compare predictions to actual
-results <- data.frame(actual = test_set$price,
+results <- data.frame(actual = exp(test_set$price),
                       predicted = pred)
 
 ## Print results
