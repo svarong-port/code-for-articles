@@ -20,18 +20,6 @@ library(dplyr)
 ## Preview the dataset
 head(diamonds)
 
-## Subset the dataset
-
-### Set seed for reproducibility
-set.seed(2019)
-
-### Create sample of 3000 from diamonds
-dm <- sample_n(diamonds,
-               3000)
-
-### View the structure
-glimpse(dm)
-
 
 ## Dummy encode categorical variables
 
@@ -41,37 +29,43 @@ options(contrasts = c("contr.treatment",
 
 ### Dummy encode
 cat_dum <- model.matrix(~ cut + color + clarity,
-                        data = dm)[, -1]
+                        data = diamonds)[, -1]
 
 ### Combine dummy-encoded categorical and numeric variables
-dm_prep <- cbind(dm |> select(carat, depth, table, x, y, z),
-                 cat_dum,
-                 price = dm$price)
+dm <- cbind(diamonds |> select(carat,
+                               depth,
+                               table,
+                               y,
+                               z),
+            cat_dum,
+            price = diamonds$price)
 
 ## Check the results
-glimpse(dm_prep)
+glimpse(dm)
 
 
 ## Check the distribution of `price`
-ggplot(dm_prep, aes(x = price)) +
+ggplot(dm,
+       aes(x = price)) +
   geom_histogram()
 
 ## Check the distribution of log `price`
-ggplot(dm_prep, aes(x = log(price))) +
+ggplot(dm,
+       aes(x = log(price))) +
   geom_histogram()
 
 
 ## Split the data
 
 ### Training index
-train_index <- sample(nrow(dm_prep),
-                      0.8 * nrow(dm_prep))
+train_index <- sample(nrow(dm),
+                      0.8 * nrow(dm))
 
 ### Create training set
-train_set <- dm_prep[train_index, ]
+train_set <- dm[train_index, ]
 
 ### Create test set
-test_set <- dm_prep[-train_index, ]
+test_set <- dm[-train_index, ]
 
 
 # --------------------------------------------------
@@ -98,6 +92,13 @@ pred_log <- predict(linear_reg,
 ## Predict in the outcome space
 pred <- exp(pred_log)
 
+## Compare predictions to actual
+results <- data.frame(actual = test_set$price,
+                      predicted = pred)
+
+## Print results
+head(results)
+
 
 # --------------------------------------------------
 
@@ -111,5 +112,5 @@ mae <- mean(abs(pred - test_set$price))
 rmse <- sqrt(mean((pred - test_set$price)^2))
 
 ## Print the results
-cat("MAE:", mae)
+cat("MAE:", mae, "\n")
 cat("RMSE:", rmse)
