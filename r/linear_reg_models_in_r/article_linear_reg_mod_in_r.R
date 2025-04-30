@@ -17,13 +17,16 @@ library(dplyr)
 
 # Prepare the dataset
 
+## Load dataset
+data(diamonds)
+
 ## Preview the dataset
-head(diamonds)
+head(diamonds, 10)
 
 
 ## Dummy encode categorical variables
 
-### Set option to dummy encoding
+### Set option for dummy encoding
 options(contrasts = c("contr.treatment",
                       "contr.treatment"))
 
@@ -32,27 +35,34 @@ cat_dum <- model.matrix(~ cut + color + clarity,
                         data = diamonds)[, -1]
 
 ### Combine dummy-encoded categorical and numeric variables
-dm <- cbind(diamonds |> select(carat,
-                               depth,
-                               table,
-                               y,
-                               z),
+dm <- cbind(diamonds[, c("carat",
+                         "depth",
+                         "table",
+                         "x",
+                         "y",
+                         "z")],
             cat_dum,
             price = diamonds$price)
 
 ## Check the results
-glimpse(dm)
+str(dm)
 
 
 ## Check the distribution of `price`
 ggplot(dm,
        aes(x = price)) +
-  geom_histogram(binwidth = 100)
+  
+  ### Instantiate a histogram
+  geom_histogram(binwidth = 100) +
+  
+  ### Add text elements
+  labs(title = "Distribution of Price",
+       x = "Price",
+       y = "Count") +
+  
+  ### Set theme to minimal
+  theme_minimal()
 
-## Check the distribution of log `price`
-ggplot(dm,
-       aes(x = log(price))) +
-  geom_histogram()
 
 ## Log-transform `price`
 dm$price_log <- log(dm$price)
@@ -60,13 +70,26 @@ dm$price_log <- log(dm$price)
 ## Drop `price`
 dm$price <- NULL
 
-## Check the results
-glimpse(dm)
+
+## Check the distribution of log `price`
+ggplot(dm,
+       aes(x = price_log)) +
+  
+  ### Instantiate a histogram
+  geom_histogram() +
+  
+  ### Add text elements
+  labs(title = "Distribution of Price After Log Transformation",
+       x = "Price (Logged)",
+       y = "Count") +
+  
+  ### Set theme to minimal
+  theme_minimal()
 
 
 ## Split the data
 
-## Set seed for reproducibility
+### Set seed for reproducibility
 set.seed(181)
 
 ### Training index
@@ -101,12 +124,19 @@ pred_log <- predict(linear_reg,
                     newdata = test_set,
                     type = "response")
 
+## Preview predictions
+head(pred_log)
+
 ## Predict in the outcome space
 pred <- exp(pred_log)
 
+## Preview predictions
+head(pred)
+
 ## Compare predictions to actual
-results <- data.frame(actual = exp(test_set$price),
-                      predicted = pred)
+results <- data.frame(actual = round(exp(test_set$price_log), 2),
+                      predicted = round(pred, 2),
+                      diff = round(exp(test_set$price_log) - pred, 2))
 
 ## Print results
 head(results)
@@ -118,11 +148,11 @@ head(results)
 # Evaluate the model performance
 
 ## Calculate MAE
-mae <- mean(abs(pred - test_set$price))
+mae <- mean(abs(results$diff))
 
 ## Calculate RMSE
-rmse <- sqrt(mean((pred - test_set$price)^2))
+rmse <- sqrt(mean((results$diff)^2))
 
 ## Print the results
-cat("MAE:", mae, "\n")
-cat("RMSE:", rmse)
+cat("MAE:", round(mae, 2), "\n")
+cat("RMSE:", round(rmse, 2))
