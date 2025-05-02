@@ -3,7 +3,7 @@
 
 # ---------------------------------------
 
-# Install dply
+# Install dplyr
 install.packages("dplyr")
 
 # Load dplyr
