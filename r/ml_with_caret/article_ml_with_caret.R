@@ -88,9 +88,14 @@ bt_test_processed <- cbind(bt_test_processed,
 
 # Train the model
 
-## Define training control
-trc <- trainControl(method= "cv",
+## Define training control:
+## use k-fold cross-validation where k = 5
+trc <- trainControl(method = "cv",
                     number = 5)
+
+## Define grid:
+## set k as odd numbers between 3 and 13
+grid <- data.frame(k = seq(3, 13, 2))
 
 ## Train
 knn_model <- train(medv ~ .,
@@ -104,8 +109,8 @@ knn_model <- train(medv ~ .,
                    ## Specify training control
                    trControl = trc,
                    
-                   ## Set tune length to 10
-                   tuneLength = 10)
+                   ## Use grid to tune the model
+                   tuneGrid = grid)
 
 ## Print the model
 knn_model
@@ -133,7 +138,8 @@ r2 <- R2(predictions,
          bt_test_processed$medv)
 
 ## Combine the results
-results <- data.frame(MAE = round(mae, 2),
+results <- data.frame(Model = "KNN",
+                      MAE = round(mae, 2),
                       RMSE = round(rmse, 2),
                       R_Squared = round(r2, 2))
 
