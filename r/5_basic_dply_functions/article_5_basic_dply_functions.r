@@ -6,7 +6,7 @@
 # Install dply
 install.packages("dplyr")
 
-# Call dplyr
+# Load dplyr
 library(dplyr)
 
 
@@ -29,94 +29,129 @@ hr_data <- data.frame(
              61000, 77000, 72000, 51000, 64000, 80000, 49000)
 )
 
-# View dataset
+# View the dataset
 hr_data
 
 
 # ---------------------------------------
 
 
-# select() example
-select(hr_data, Name, Department, Engagement)
+# Select `Name`, `Department`, `Engagement`
+select(hr_data,
+       Name,
+       Department,
+       Engagement)
 
 
 # ---------------------------------------
 
 
-# filter() examples
+# Filter data
 
-## 1 condition
-filter(hr_data, AttritionRisk == "High")
+## With 1 condition
+filter(hr_data,
+       AttritionRisk == "High")
 
-## more than 1 condition
-filter(hr_data, AttritionRisk == "High" & Department == "Finance")
-
-
-# ---------------------------------------
-
-
-# arrange() examples
-
-## default sorting: ascending
-arrange(hr_data, Engagement)
-
-
-## sort descending
-arrange(hr_data, desc(Engagement))
+## With >1 conditions
+filter(hr_data,
+       AttritionRisk == "High" & Department == "Finance")
 
 
 # ---------------------------------------
 
 
-# summarise() examples
+# Arrange data
 
-## summarise() alone
-summarise(hr_data, mean(Engagement))
-
-
-## summarise() + group_by()
-summarise(group_by(hr_data, AttritionRisk), mean(Engagement))
+## Sort ascending
+arrange(hr_data,
+        Engagement)
 
 
-## naming output in summarise()
-summarise(group_by(hr_data, AttritionRisk), AvgEng = mean(Engagement))
+## Sort descending
+arrange(hr_data,
+        desc(Engagement))
 
 
 # ---------------------------------------
 
 
-# mutate() example
-mutate(hr_data, YearsUntilRetirement = 60 - Age)
+# Summarise data
+
+## Calculate mean
+summarise(hr_data,
+          mean(Engagement))
+
+
+## Summarise with group by
+summarise(group_by(hr_data, AttritionRisk),
+          mean(Engagement))
+
+
+## Naming the output
+summarise(group_by(hr_data, AttritionRisk),
+          AvgEng = mean(Engagement))
 
 
 # ---------------------------------------
 
 
-# pipe examples
+# Mutate data
+mutate(hr_data,
+       YearsUntilRetirement = 60 - Age)
 
-## example 1
+
+# ---------------------------------------
+
+
+# Using the pipe operator
+
+## Example 1
 hr_data |>
+  
+  ## Group by AttritionRisk
   group_by(AttritionRisk) |>
+  
+  ## Calculate mean
   summarise(AvgEng = mean(Engagement))
 
-## example 2
+
+## Example 2
 hr_data |>
+  
+  ## Filter for high attrition risk
   filter(AttritionRisk == "High") |>
-  arrange(desc(YearsAtCompany), desc(Salary))
+  
+  ## Sort descending by tenure and salary
+  arrange(desc(YearsAtCompany),
+          desc(Salary))
 
 
-## example 3
+## Example 3
 hr_data |> 
+  
+  ## Group by department
   group_by(Department) |>
+  
+  ## Calculate mean and count the number of employees
   summarise(AvgEng = mean(Engagement),
             EmpCount = n()) |>
+  
+  ## Sort descending by average engagement
   arrange(desc(AvgEng))
 
-## example 4
+## Example 4
 hr_data |>
+  
+  ## Group by department
   group_by(Department) |>
+  
+  ## Calculate sum and percentage
   summarise(HighRiskCount = sum(AttritionRisk == "High"),
             TotalEmp = n(),
             HighRiskRatio = (HighRiskCount / TotalEmp) * 100) |>
+  
+  ## Select desired columns
   select(Department, HighRiskRatio, TotalEmp, HighRiskCount) |>
+  
+  ## Sort descending by high rish ratio
   arrange(desc(HighRiskRatio))
