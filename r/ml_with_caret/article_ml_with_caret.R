@@ -95,7 +95,9 @@ trc <- trainControl(method = "cv",
 
 ## Define grid:
 ## set k as odd numbers between 3 and 13
-grid <- data.frame(k = seq(3, 13, 2))
+grid <- data.frame(k = seq(from = 3,
+                           to = 13,
+                           by = 2))
 
 ## Train
 knn_model <- train(medv ~ .,
