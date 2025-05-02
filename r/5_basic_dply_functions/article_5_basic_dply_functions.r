@@ -36,7 +36,7 @@ hr_data
 # ---------------------------------------
 
 
-# Select `Name`, `Department`, `Engagement`
+# Select data
 select(hr_data,
        Name,
        Department,
