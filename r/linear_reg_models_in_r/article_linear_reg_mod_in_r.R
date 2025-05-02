@@ -71,7 +71,7 @@ dm$price_log <- log(dm$price)
 dm$price <- NULL
 
 
-## Check the distribution of log `price`
+## Check the distribution of logged `price`
 ggplot(dm,
        aes(x = price_log)) +
   
