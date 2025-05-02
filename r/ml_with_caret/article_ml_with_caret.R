@@ -49,6 +49,10 @@ bt_train <- BostonHousing[train_index, ]
 ## Create test set
 bt_test <- BostonHousing[-train_index, ]
 
+## Check the results
+cat("Rows in training set:", nrow(bt_train), "\n")
+cat("Rows in test set:", nrow(bt_test))
+
 
 # ---------------------------------------
 
@@ -58,7 +62,7 @@ bt_test <- BostonHousing[-train_index, ]
 ## Learn preprocessing on training set
 ppc <- preProcess(bt_train[, -14],
                   
-                  ## Centre and scaling
+                  ## Centre and scale
                   method = c("center",
                              "scale"))
 
