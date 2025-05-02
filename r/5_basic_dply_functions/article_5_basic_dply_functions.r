@@ -1,8 +1,6 @@
 # Code for 5 basic dplyr functions
 
 
-# ---------------------------------------
-
 # Install dplyr
 install.packages("dplyr")
 
