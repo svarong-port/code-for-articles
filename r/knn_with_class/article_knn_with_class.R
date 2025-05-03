@@ -29,7 +29,8 @@ normalise <- function(x) {
 }
 
 ### Apply the function to the dataset
-iris_normalised <- as.data.frame(lapply(iris[, 1:4], normalise))
+iris_normalised <- as.data.frame(lapply(iris[, 1:4],
+                                        normalise))
 
 ### Add species column back into the data frame
 iris_normalised$Species <- iris$Species
@@ -76,11 +77,13 @@ predictions <- knn(train = train_X,
 cm <- table(Predicted = predictions,
             Actual = test_Y)
 
+## Print the matrix
 print(cm)
 
 ## Calculate accuracy
 acc <- sum(diag(cm)) / sum(cm)
 
+## Print accuracy
 cat("Accuracy:", round(acc, 2))
 
 
@@ -116,6 +119,7 @@ for (i in seq_along(k_values)) {
 best_k <- k_values[which.max(accuracy_results)]
 best_accuracy <- max(accuracy_results)
 
+## Print the best k and accuracy
 cat(paste("Best k:", best_k),
     paste("Accuracy:", round(best_accuracy, 2)),
     sep = "\n")
