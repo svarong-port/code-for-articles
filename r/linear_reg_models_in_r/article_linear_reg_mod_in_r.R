@@ -51,7 +51,8 @@ ggplot(dm,
        aes(x = price)) +
   
   ### Instantiate a histogram
-  geom_histogram(binwidth = 100) +
+  geom_histogram(binwidth = 100,
+                 fill = "skyblue3") +
   
   ### Add text elements
   labs(title = "Distribution of Price",
@@ -74,7 +75,7 @@ ggplot(dm,
        aes(x = price_log)) +
   
   ### Instantiate a histogram
-  geom_histogram() +
+  geom_histogram(fill = "skyblue3") +
   
   ### Add text elements
   labs(title = "Distribution of Price After Log Transformation",
