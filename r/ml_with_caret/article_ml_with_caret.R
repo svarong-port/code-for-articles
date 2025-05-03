@@ -35,13 +35,9 @@ str(BostonHousing)
 set.seed(888)
 
 ## Get train index
-train_index <- createDataPartition(BostonHousing$medv,
-                                   
-                                   ## Set aside 70% for training set
-                                   p = 0.7,
-                                   
-                                   ## Return as matrix
-                                   list = FALSE)
+train_index <- createDataPartition(BostonHousing$medv, ## Specify the outcome
+                                   p = 0.7, ## Set aside 70% for training set
+                                   list = FALSE) ## Return as matrix
 
 ## Create training set
 bt_train <- BostonHousing[train_index, ]
@@ -60,11 +56,8 @@ cat("Rows in test set:", nrow(bt_test))
 # Preprocessing
 
 ## Learn preprocessing on training set
-ppc <- preProcess(bt_train[, -14],
-                  
-                  ## Centre and scale
-                  method = c("center",
-                             "scale"))
+ppc <- preProcess(bt_train[, -14], ## Select all predictors
+                  method = c("center", "scale"))  ## Centre and scale
 
 ## Apply preprocessing to training set
 bt_train_processed <- predict(ppc,
@@ -80,7 +73,7 @@ bt_test_processed <- predict(ppc,
 
 ## Combine the preprocessed test set with outcome
 bt_test_processed <- cbind(bt_test_processed,
-                            medv = bt_test$medv)
+                           medv = bt_test$medv)
 
 
 # ---------------------------------------
@@ -100,19 +93,11 @@ grid <- data.frame(k = seq(from = 3,
                            by = 2))
 
 ## Train
-knn_model <- train(medv ~ .,
-                   
-                   ## Use training set
-                   data = bt_train_processed,
-                   
-                   ## Use knn engine
-                   method = "knn",
-                   
-                   ## Specify training control
-                   trControl = trc,
-                   
-                   ## Use grid to tune the model
-                   tuneGrid = grid)
+knn_model <- train(medv ~ ., ## Specify the formula
+                   data = bt_train_processed, ## Use training set
+                   method = "knn", ## Use kknn engine
+                   trControl = trc, ## Specify training control
+                   tuneGrid = grid) ## Use grid to tune the model
 
 ## Print the model
 knn_model
