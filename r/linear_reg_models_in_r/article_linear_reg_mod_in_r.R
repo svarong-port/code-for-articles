@@ -31,8 +31,8 @@ options(contrasts = c("contr.treatment",
                       "contr.treatment"))
 
 ### Dummy encode
-cat_dum <- model.matrix(~ cut + color + clarity,
-                        data = diamonds)[, -1]
+cat_dum <- model.matrix(~ cut + color + clarity - 1,
+                        data = diamonds)
 
 ### Combine dummy-encoded categorical and numeric variables
 dm <- cbind(diamonds[, c("carat",
