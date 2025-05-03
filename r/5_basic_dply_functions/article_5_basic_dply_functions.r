@@ -34,7 +34,7 @@ hr_data
 # ---------------------------------------
 
 
-# Select data
+# Select only desired columns
 select(hr_data,
        Name,
        Department,
@@ -46,11 +46,11 @@ select(hr_data,
 
 # Filter data
 
-## With 1 condition
+## Filter for high attrition risk
 filter(hr_data,
        AttritionRisk == "High")
 
-## With >1 conditions
+## Filter for high attrition risk in Finance
 filter(hr_data,
        AttritionRisk == "High" & Department == "Finance")
 
@@ -60,12 +60,12 @@ filter(hr_data,
 
 # Arrange data
 
-## Sort ascending
+## Sort employees by engagement
 arrange(hr_data,
         Engagement)
 
 
-## Sort descending
+## Sort employees by engagement, from high to low
 arrange(hr_data,
         desc(Engagement))
 
@@ -75,12 +75,12 @@ arrange(hr_data,
 
 # Summarise data
 
-## Calculate mean
+## Calculate mean engagement
 summarise(hr_data,
           mean(Engagement))
 
 
-## Summarise with group by
+## Calculate mean engagement by attrition risk
 summarise(group_by(hr_data, AttritionRisk),
           mean(Engagement))
 
@@ -93,7 +93,7 @@ summarise(group_by(hr_data, AttritionRisk),
 # ---------------------------------------
 
 
-# Mutate data
+# Add a new column
 mutate(hr_data,
        YearsUntilRetirement = 60 - Age)
 
@@ -137,13 +137,14 @@ hr_data |>
   ## Sort descending by average engagement
   arrange(desc(AvgEng))
 
+
 ## Example 4
 hr_data |>
   
   ## Group by department
   group_by(Department) |>
   
-  ## Calculate sum and percentage
+  ## Count high attrition risk and find attrition risk ratio
   summarise(HighRiskCount = sum(AttritionRisk == "High"),
             TotalEmp = n(),
             HighRiskRatio = (HighRiskCount / TotalEmp) * 100) |>
