@@ -4,12 +4,10 @@
 # Install and load packages
 
 ## Install
-install.packages("ggplot2") # for diamonds dataset and visualisation
-install.packages("dplyr") # for data manipulation
+install.packages("ggplot2")
 
 ## Load
 library(ggplot2)
-library(dplyr)
 
 
 # --------------------------------------------------
