@@ -1,4 +1,4 @@
-# Code for Regression Models in R
+# Code for Lnear Regression in R
 
 
 # Install and load packages
