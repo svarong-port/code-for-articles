@@ -1,4 +1,4 @@
-# Code for Lnear Regression in R
+# Code for Linear Regression in R
 
 
 # Install and load packages
@@ -22,17 +22,17 @@ data(diamonds)
 head(diamonds, 10)
 
 
-## Dummy encode categorical variables
+## One-hot encode categorical variables
 
-### Set option for dummy encoding
+### Set option for one-hot encoding
 options(contrasts = c("contr.treatment",
                       "contr.treatment"))
 
-### Dummy encode
+### One-hot encode
 cat_dum <- model.matrix(~ cut + color + clarity - 1,
                         data = diamonds)
 
-### Combine dummy-encoded categorical and numeric variables
+### Combine one-hot-encoded categorical and numeric variables
 dm <- cbind(diamonds[, c("carat",
                          "depth",
                          "table",
