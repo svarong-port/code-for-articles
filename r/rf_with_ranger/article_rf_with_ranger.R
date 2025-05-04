@@ -130,7 +130,7 @@ ntree_vals <- c(300, 500, 700)
 mtry_vals <- 2:5
 min_node_vals <- c(1, 5, 10)
 
-## Expand grid
+## Create a hyperparametre grid
 grid <- expand.grid(num.trees = ntree_vals,
                     mtry = mtry_vals,
                     min.node.size = min_node_vals)
@@ -138,7 +138,7 @@ grid <- expand.grid(num.trees = ntree_vals,
 ## Instantiate an empty data frame
 hpt_results <- data.frame()
 
-## For-loop through the hyperparametre combinations
+## For-loop through the hyperparametre grid
 for (i in 1:nrow(grid)) {
   
   ## Get the combination
