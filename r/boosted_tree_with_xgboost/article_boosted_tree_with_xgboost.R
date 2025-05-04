@@ -1,23 +1,21 @@
 # Code for Boosted Tree With xgboost Package
 
 
-## Install and load packages
+# Install and load packages
 
 ## Install
 install.packages("xgboost")
 install.packages("ggplot2")
-install.packages("dplyr")
 
 ## Load
 library(xgboost)
 library(ggplot2)
-library(dplyr)
 
 
 # --------------------------------------------------
 
 
-## Load the dataset
+# Load the dataset
 
 ## Load
 data(mpg)
@@ -32,14 +30,17 @@ str(mpg)
 # --------------------------------------------------
 
 
-## Prepare the dataset
+# Prepare the dataset
 
 ## Convert character columns to factor
 
 ## Get character columns
-chr_cols <- c("manufacturer", "model",
-              "trans", "drv",
-              "fl", "class")
+chr_cols <- c("manufacturer",
+              "model",
+              "trans",
+              "drv",
+              "fl",
+              "class")
 
 ## For-loop through the character columns
 for (col in chr_cols) {
@@ -53,13 +54,10 @@ str(mpg)
 # --------------------------------------------------
 
 
-## Separate the features from the outcome
+# Separate the features from the outcome
 
 ## Get the features
-x <- mpg |>
-  
-  ## Deselect the outcome
-  select(-hwy)
+x <- mpg[, !names(mpg) %in% "hwy"]
 
 ## One-hot encode the features
 x <- model.matrix(~ . - 1,
@@ -72,28 +70,36 @@ y <- mpg$hwy
 # --------------------------------------------------
 
 
-## Split the data
+# Split the data
 
 ## Set seed for reproducibility
 set.seed(360)
 
-## Get x_train index
+## Get training index
 train_index <- sample(1:nrow(x),
                       nrow(x) * 0.8)
 
-## Create x train and test
+## Create x, y train
 x_train <- x[train_index, ]
-x_test <- x[-train_index, ]
-
-## Create y train and test
 y_train <- y[train_index]
+
+## Create x, y test
+x_test <- x[-train_index, ]
 y_test <- y[-train_index]
+
+## Check the results
+cat("TRAIN SET", "\n")
+cat("1. Data in x_train:", nrow(x_train), "\n")
+cat("2. Data in y_train:", length(y_train), "\n")
+cat("---", "\n", "TEST SET", "\n")
+cat("1. Data in x_test:", nrow(x_test), "\n")
+cat("2. Data in y_test:", length(y_test), "\n")
 
 
 # --------------------------------------------------
 
 
-## Convert to DMatrix
+# Convert to DMatrix
 
 ## Training set
 train_set <- xgb.DMatrix(data = x_train,
@@ -103,83 +109,66 @@ train_set <- xgb.DMatrix(data = x_train,
 test_set <- xgb.DMatrix(data = x_test,
                         label = y_test)
 
+## Check the results
+cat("TRAIN SET:", "\n")
+train_set
+cat("---", "\n", "TEST SET", "\n")
+test_set
+
 
 # --------------------------------------------------
 
 
-## Train the model
+# Train the model
 
-## Aet hyperparametres
+## Set hyperparametres
 hp <- list(objective = "reg:squarederror",
            eta = 0.1,
-           max_depth = 4)
-
+           max_depth = 4,
+           eval_metric = c("rmse",
+                           "mae"))
 
 ## Train
 xgb_model <- xgb.train(params = hp,
                        data = train_set,
-                       nrounds = 100,
+                       nrounds = 50,
                        watchlist = list(train = train_set,
                                         test = test_set),
                        verbose = 1)
+
+## Print the model
+xgb_model
 
 
 # --------------------------------------------------
 
 
-## Evaluate the model
+# Evaluate the model
 
 ## Make predictions
 y_pred <- predict(xgb_model,
-                  x_test)
+                  newdata = x_test)
 
-## Visualise the predictions
-ggplot(data.frame(actual = y_test,
-                  predicted = y_pred),
-       aes(x = actual,
-           y = predicted)) +
-  
-  ## Instantiate a scatter plot
-  geom_point(alpha = 0.5,
-             color = "darkgreen") +
-  
-  ## Add line
-  geom_abline(slope = 1,
-              intercept = 0,
-              color = "red") +
-  
-  ## Add error lines
-  geom_segment(aes(x = actual,
-                   xend = actual,
-                   y = predicted,
-                   yend = actual),
-               color = "grey",
-               linetype = "dashed") +
-  
-  ## Add text elements
-  labs(title = "XGBoost: Actual vs Predicted",
-       x = "Actual hwy",
-       y = "Predicted hwy") +
-  
-  ## Set theme to minimal
-  theme_minimal()
+## Compare predictions to actual outcomes
+results <- data.frame(actual = y_test,
+                      predicted = y_pred,
+                      error = y_test - y_pred)
 
-
-## Calculate errors
-errors <- y_test - y_pred
+## Preview the results
+head(results, 10)
 
 ## Calculate MAE
-mae <- mean(abs(errors))
+mae <- mean(abs(results$error))
 
 ## Calculate RMSE
-rmse <- sqrt(mean((errors)^2))
+rmse <- sqrt(mean((results$error)^2))
 
-## Calculate R-squared
-ss_res <- sum((errors)^2)
-ss_tot <- sum((y_test - mean(y_test))^2)
+## Calculate R squared
+ss_res <- sum((results$error)^2)
+ss_tot <- sum((results$actual - mean(results$actual))^2)
 r_squared <- 1 - (ss_res / ss_tot)
 
 ## Print the results
 cat("MAE:", round(mae, 2), "\n")
 cat("RMSE:", round(rmse, 2), "\n")
-cat("R-squared:", round(r_squared, 2), "\n")
+cat("R squared:", round(r_squared, 2), "\n")
