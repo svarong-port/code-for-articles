@@ -125,7 +125,7 @@ vip(rf_model)  +
 
 # Hyperparametre tuning
 
-## Define a hyperparametre grid
+## # Define hyperparametres
 ntree_vals <- c(300, 500, 700)
 mtry_vals <- 2:5
 min_node_vals <- c(1, 5, 10)
