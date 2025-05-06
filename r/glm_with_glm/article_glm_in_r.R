@@ -1,61 +1,148 @@
 # Code for Generalised Linear Model in R
 
-# Load the data
-data(mtcars)
 
-# Convert `vs` to factor
-mtcars$vs <- factor(mtcars$vs,
-                    levels = c(0, 1),
-                    labels = c("V-shaped", "straight"))
+# Generate mock coffee shop dataset (15 days)
 
-# Convert `am` to factor
-mtcars$am <- factor(mtcars$am,
-                    levels = c(0, 1),
-                    labels = c("automatic", "manual"))
+## Set seed for reproducibility
+set.seed(123)
 
-# View the structure
-str(mtcars)
+## Generate
+coffee_shop <- data.frame(
+  
+  ## Generate 15 days
+  day = 1:15,
+  
+  ## Generate daily temperature
+  temp = round(rnorm(15,
+                     mean = 25,
+                     sd = 5),
+               1),
+  
+  ## Generate promotion day
+  promo = sample(c(0, 1),
+                 15,
+                 replace = TRUE),
+  
+  ## Generate weekend
+  weekend = c(0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1),
+  
+  ## Generate the number of sales
+  sales = round(rnorm(15,
+                      mean = 300,
+                      sd = 50)),
+  
+  ## Generate the number of daily customers
+  customers = rpois(15,
+                    lambda = 80),
+  
+  ## Generate sold-out
+  sold_out = sample(c(0, 1),
+                    15,
+                    replace = TRUE)
+)
+
+## Convert binary variables to factors
+coffee_shop$promo <- factor(coffee_shop$promo,
+                            levels = c(0, 1),
+                            labels = c("NoPromo", "Promo"))
+
+coffee_shop$weekend <- factor(coffee_shop$weekend,
+                              levels = c(0, 1),
+                              labels = c("Weekday", "Weekend"))
+
+coffee_shop$sold_out <- factor(coffee_shop$sold_out,
+                               levels = c(0, 1),
+                               labels = c("No", "Yes"))
+
+## View the dataset
+print(coffee_shop)
 
 
-# Linear regression
+# ----------------------------------------------------------
+
+
+# Linear regression: Predicting sales
 
 ## Fit the model
-linear_reg <- glm(mpg ~ wt + hp,
-                  data = mtcars,
+linear_reg <- glm(sales ~ temp + promo + weekend,
+                  data = coffee_shop,
                   family = gaussian)
 
-## View the model
-summary(linear_reg)
+## Make predictions
+linear_reg_preds <- predict(linear_reg,
+                            type = "response")
+
+## Compare predicted vs actual
+data.frame(predicted = round(linear_reg_preds, 2),
+           actual = coffee_shop$sales)
 
 
-# Logistic regression
+# ----------------------------------------------------------
+
+
+# Logistic regression: Predict probability of sold-out
 
 ## Fit the model
-log_reg <- glm(am ~ wt + hp,
-               data = mtcars,
+log_reg <- glm(sold_out ~ temp + promo + weekend,
+               data = coffee_shop,
                family = binomial)
 
-## View the model
-summary(log_reg)
+
+## Get predictive probabilities
+log_reg_probs <- predict(log_reg,
+                         type = "response")
+
+## Compare predicted vs actual
+log_reg_results <- data.frame(
+  probability = round(log_reg_probs, 2),
+  predicted = ifelse(log_reg_probs > 0.5,
+                     "Yes",
+                     "No"),
+  actual = coffee_shop$sold_out
+)
+
+## Print the results
+log_reg_results
+
+## Create a confusion matrix
+table(predicted = log_reg_results$predicted,
+      actual = log_reg_results$actual)
 
 
-# Poisson regression
+
+# ----------------------------------------------------------
+
+
+# Poisson regression: Predicting the number of customers per day
 
 ## Fit the model
-poisson_reg <- glm(cyl ~ wt + hp,
-                   data = mtcars,
+poisson_reg <- glm(customers ~ temp + promo + weekend,
+                   data = coffee_shop,
                    family = poisson)
 
-## View the model
-summary(poisson_reg)
+## Make predictions
+poisson_reg_preds <- predict(poisson_reg,
+                             type = "response")
+
+## Compare predicted vs actual
+data.frame(predicted = round(poisson_reg_preds, 0),
+           actual = coffee_shop$customers)
 
 
-# Quasi-poisson regression
+# ----------------------------------------------------------
+
+
+# Quasi-poisson: Predicting the number of customers per day (overdispersed)
 
 ## Fit the model
-qp_reg <- glm(cyl ~ wt + hp,
-              data = mtcars,
-              family = quasipoisson(link = "log"))
+qp_reg <- glm(customers ~ temp + promo + weekend,
+              data = coffee_shop,
+              family = quasipoisson)
 
-## View the model
-summary(qp_reg)
+## Make predictions
+qp_reg_preds <- predict(qp_reg,
+                        type = "response")
+
+## Compare predicted vs actual
+data.frame(predicted = round(qp_reg_preds, 0),
+           actual = coffee_shop$customers)
