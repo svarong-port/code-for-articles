@@ -1,0 +1,40 @@
+# Example of non-normal data and linear model
+
+# Load ggplot2
+library(ggplot2)
+
+
+# Set seed for reproducibility
+set.seed(42)
+
+# Create variables
+x <- runif(100, 0, 10)
+y_prob <- 1 / (1 + exp(-(-2 + 0.5 * x)))
+y <- rbinom(100, 1, y_prob)
+
+# Create a data frame
+df <- data.frame(x = x, y = y)
+
+
+# Create the scatter plot with the linear regression line using ggplot2
+ggplot(df,
+       aes(x = x,
+           y = y)) +
+  
+  # Instantiate a scatter plot
+  geom_point(color = "blue") +
+  
+  # Add a regression line
+  geom_smooth(method = "lm",
+              se = FALSE,
+              color = "red") + 
+  
+  # Add a title and axis labels
+  labs(
+    title = "Scatter Plot of Binomial Outcome with Linear Regression Line",
+    x = "Predictor Variable (x)",
+    y = "Binomial Outcome (y)"
+  ) +
+  
+  # Set classic theme
+  theme_classic()
