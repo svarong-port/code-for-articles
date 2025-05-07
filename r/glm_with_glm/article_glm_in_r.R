@@ -68,13 +68,35 @@ linear_reg <- glm(sales ~ temp + promo + weekend,
                   data = coffee_shop,
                   family = gaussian)
 
+## Get model summary
+summary(linear_reg)
+
 ## Make predictions
 linear_reg_preds <- predict(linear_reg,
                             type = "response")
 
 ## Compare predicted vs actual
-data.frame(predicted = round(linear_reg_preds, 2),
-           actual = coffee_shop$sales)
+linear_reg_results <- data.frame(
+  predicted = round(linear_reg_preds, 2),
+  actual = coffee_shop$sales
+  )
+
+## Print the results
+linear_reg_results
+
+## Plot predicted vs actual
+plot(linear_reg_results$predicted,
+     linear_reg_results$actual,
+     main = "Linear Regression: Predicted vs Actual Sales",
+     xlab = "Predicted Sales",
+     ylab = "Actual Sales",
+     pch = 16,
+     col = "darkgreen")
+abline(0,
+       1,
+       col = "red",
+       lwd = 2,
+       lty = 2)
 
 
 # ----------------------------------------------------------
@@ -87,6 +109,11 @@ log_reg <- glm(sold_out ~ temp + promo + weekend,
                data = coffee_shop,
                family = binomial)
 
+## Get model summary
+summary(log_reg)
+
+## Transform coefficient
+exp(coef(log_reg))
 
 ## Get predictive probabilities
 log_reg_probs <- predict(log_reg,
@@ -109,7 +136,6 @@ table(predicted = log_reg_results$predicted,
       actual = log_reg_results$actual)
 
 
-
 # ----------------------------------------------------------
 
 
@@ -120,29 +146,31 @@ poisson_reg <- glm(customers ~ temp + promo + weekend,
                    data = coffee_shop,
                    family = poisson)
 
+## Get model summary
+summary(poisson_reg)
+
+## Transform the coefficients
+exp(coef(poisson_reg))
+
 ## Make predictions
 poisson_reg_preds <- predict(poisson_reg,
                              type = "response")
 
 ## Compare predicted vs actual
-data.frame(predicted = round(poisson_reg_preds, 0),
-           actual = coffee_shop$customers)
+poisson_reg_results <- data.frame(
+  predicted = round(poisson_reg_preds, 0),
+  actual = coffee_shop$customers
+  )
 
+## Print the results
+poisson_reg_results
 
-# ----------------------------------------------------------
-
-
-# Quasi-poisson: Predicting the number of customers per day (overdispersed)
-
-## Fit the model
-qp_reg <- glm(customers ~ temp + promo + weekend,
-              data = coffee_shop,
-              family = quasipoisson)
-
-## Make predictions
-qp_reg_preds <- predict(qp_reg,
-                        type = "response")
-
-## Compare predicted vs actual
-data.frame(predicted = round(qp_reg_preds, 0),
-           actual = coffee_shop$customers)
+## Plot predicted vs actual
+plot(poisson_reg_results$predicted,
+     poisson_reg_results$actual,
+     main = "Predicted vs Actual Customers (Poisson)",
+     xlab = "Predicted",
+     ylab = "Actual")
+abline(0,
+       1,
+       col = "blue")
