@@ -103,7 +103,7 @@ pass_yr <- apply.yearly(x = pass_zoo,
 autoplot.zoo(pass_yr) +
   
   ## Add title and label
-  labs(title = "Number of Passengers From 1950 to 1960",
+  labs(title = "Average Number of Passengers From 1950 to 1960",
        x = "Year",
        y = "Averange Number of Passengers")
 
@@ -116,6 +116,6 @@ pass_qtr <- apply.quarterly(x = pass_zoo,
 autoplot.zoo(pass_qtr) +
   
   ## Add title and label
-  labs(title = "Number of Passengers From 1950 to 1960",
+  labs(title = "Maximum Number of Passengers From 1950 to 1960",
        x = "Quarter",
        y = "Maximum Number of Passengers")
