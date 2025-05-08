@@ -7,11 +7,13 @@
 install.packages("lubridate")
 install.packages("zoo")
 install.packages("xts")
+install.packages("ggplot2")
 
 ## Load
 library(lubridate)
 library(zoo)
 library(xts)
+library(ggplot2)
 
 
 # ---------------------------------------------
@@ -53,7 +55,12 @@ tail(pass_zoo)
 
 
 # Plot the time series
-autoplot.zoo(pass_zoo)
+autoplot.zoo(pass_zoo) +
+  
+  ## Add title and label
+  labs(title = "Number of Passengers From 1950 to 1960",
+       x = "Month",
+       y = "Number of Passengers")
 
 
 # ---------------------------------------------
@@ -93,7 +100,12 @@ pass_yr <- apply.yearly(x = pass_zoo,
                         FUN = mean)
 
 ## Plot yearly data
-autoplot.zoo(pass_yr)
+autoplot.zoo(pass_yr) +
+  
+  ## Add title and label
+  labs(title = "Number of Passengers From 1950 to 1960",
+       x = "Year",
+       y = "Averange Number of Passengers")
 
 
 ## Aggregate at quarterly level
@@ -101,4 +113,9 @@ pass_qtr <- apply.quarterly(x = pass_zoo,
                             FUN = max)
 
 ## Plot quarterly data
-autoplot.zoo(pass_qtr)
+autoplot.zoo(pass_qtr) +
+  
+  ## Add title and label
+  labs(title = "Number of Passengers From 1950 to 1960",
+       x = "Quarter",
+       y = "Maximum Number of Passengers")
