@@ -95,7 +95,7 @@ pass_zoo[index_55_56]
 
 # Aggregating
 
-## Aggregate at quarterly level
+## Example 1. Aggregate at quarterly level
 pass_yr <- apply.yearly(x = pass_zoo,
                         FUN = mean)
 
@@ -108,7 +108,7 @@ autoplot.zoo(pass_yr) +
        y = "Averange Number of Passengers")
 
 
-## Aggregate at quarterly level
+## Example 2. Aggregate at quarterly level
 pass_qtr <- apply.quarterly(x = pass_zoo,
                             FUN = max)
 
