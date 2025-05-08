@@ -90,7 +90,7 @@ pass_zoo[index_55_56]
 
 ## Aggregate at quarterly level
 pass_yr <- apply.yearly(x = pass_zoo,
-                            FUN = mean)
+                        FUN = mean)
 
 ## Plot yearly data
 autoplot.zoo(pass_yr)
@@ -98,7 +98,7 @@ autoplot.zoo(pass_yr)
 
 ## Aggregate at quarterly level
 pass_qtr <- apply.quarterly(x = pass_zoo,
-                            FUN = mean)
+                            FUN = max)
 
 ## Plot quarterly data
 autoplot.zoo(pass_qtr)
