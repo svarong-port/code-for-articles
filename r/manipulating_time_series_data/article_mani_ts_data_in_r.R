@@ -26,7 +26,7 @@ library(ggplot2)
 # Load the data
 
 ## Load
-btc <- read.csv("Bitcoin History.csv")
+btc <- read.csv("btc_hist_2010-2024.csv")
 
 ## Preview
 head(btc)
