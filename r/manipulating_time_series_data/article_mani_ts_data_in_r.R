@@ -219,7 +219,7 @@ btc_first_halving
 
 # Aggregate data
 
-## View yearly max price
+## Example 1. View yearly max price
 btc_yr_max <- apply.yearly(btc_zoo[, "close"],
                            FUN = max)
 
@@ -238,7 +238,7 @@ autoplot.zoo(btc_yr_max) +
   theme_minimal()
 
 
-## Create customised frequency
+## Example 2. Create customised frequency
 
 ### Create half-year interval
 half_year_eps <- endpoints(x = btc_zoo,
