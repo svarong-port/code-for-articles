@@ -145,7 +145,7 @@ autoplot.zoo(btc_zoo[, "close"]) +
   geom_line(color = "blue") +
   
   ## Add title and labels
-  labs(title = "Bitcoin Closing Price Across the Years (2010-2024)",
+  labs(title = "Bitcoin Closing Price Over Time (2010-2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -172,7 +172,7 @@ autoplot.zoo(btc_winter_1[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Closing Price During Crypto Winter (Nov 2021 - Dec 2022)",
+  labs(title = "Bitcoin Closing Price During 2021-2022 Crypto Winter",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -197,7 +197,7 @@ autoplot.zoo(btc_winter_2[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Closing Price During Crypto Winter (Nov 2021 - Dec 2022)",
+  labs(title = "Bitcoin Closing Price During 2021-2022 Crypto Winter",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -230,7 +230,7 @@ autoplot.zoo(btc_yr_max) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Yearly Max Closing Price (2010-2024)",
+  labs(title = "Bitcoin Yearly Maximum Closing Price (2010-2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -257,7 +257,94 @@ autoplot.zoo(btc_half_yr_data) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Average Closing Price at a 6-Month Interval (2010-2024)",
+  labs(title = "Bitcoin 6-Month Average Closing Price (2010-2024)",
+       x = "Date",
+       y = "Closing Price (USD)") +
+  
+  ### Use minimal theme
+  theme_minimal()
+
+
+# ----------------------------------------
+
+
+# Rolling window
+
+## Example 1. Preset rolling window function
+
+### Create the window for mean price
+btc_30_days_roll_mean <- rollmean(x = btc_zoo,
+                                  k = 30,
+                                  align = "right",
+                                  fill = NA)
+
+### Plot the results
+autoplot.zoo(btc_30_days_roll_mean[, "close"]) +  
+  
+  ### Adjust line colour
+  geom_line(color = "blue") +
+  
+  ### Add title and labels
+  labs(title = "Bitcoin 30-Day Rolling Mean Price (2010-2024)",
+       x = "Date",
+       y = "Closing Price (USD)") +
+  
+  ### Use minimal theme
+  theme_minimal()
+
+
+## Example 2. Customed rolling window
+
+### Creating a rolling window with min() function
+btc_30_days_roll_min <- rollapply(data = btc_zoo,
+                                  width = 30,
+                                  FUN = min,
+                                  align = "right",
+                                  fill = NA)
+
+### Plot the results
+autoplot.zoo(btc_30_days_roll_min[, "close"]) +  
+  
+  ### Adjust line colour
+  geom_line(color = "blue") +
+  
+  ### Add title and labels
+  labs(title = "Bitcoin 30-Day Rolling Minimum Price (2010-2024)",
+       x = "Date",
+       y = "Closing Price (USD)") +
+  
+  ### Use minimal theme
+  theme_minimal()
+
+
+# ----------------------------------------
+
+
+# Expanding window
+
+## Subset for 2024 data
+btc_2024 <- window(x = btc_zoo,
+                   start = as.Date("2024-01-01"),
+                   end = as.Date("2024-02-09"))
+
+## Create a sequence of widths
+btc_width <- seq_along(btc_2024)
+
+## Create an expanding window for mean price
+btc_exp_mean <- rollapply(data = btc_2024,
+                          width = btc_width,
+                          FUN = mean,
+                          align = "right",
+                          fill = NA)
+
+### Plot the results
+autoplot.zoo(btc_exp_mean[, "close"]) +  
+  
+  ### Adjust line colour
+  geom_line(color = "blue") +
+  
+  ### Add title and labels
+  labs(title = "Bitcoin Expanding Mean Price (Jan-Feb, 2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
