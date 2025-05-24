@@ -43,6 +43,7 @@ str(btc)
 ## Make a copy of the dataset
 btc_cleaned <- btc
 
+
 ## Rename columns
 
 ### Create new column names
@@ -96,7 +97,7 @@ str(btc_cleaned)
 # ----------------------------------------
 
 
-# Convert character to Date
+# Convert `date` to Date
 btc_cleaned$date <- as.Date(btc_cleaned$date,
                             format = "%b %d, %Y")
 
@@ -107,7 +108,7 @@ str(btc_cleaned)
 # ----------------------------------------
 
 
-# Convert data to zoo object
+# Convert data frame to zoo object
 
 ## Convert
 btc_zoo <- zoo(btc_cleaned[, -1],
@@ -120,7 +121,7 @@ head(btc_zoo)
 # ----------------------------------------
 
 
-# Fill the missing value
+# Fill the missing values
 
 ## Check for missing values
 anyNA(btc_zoo)
