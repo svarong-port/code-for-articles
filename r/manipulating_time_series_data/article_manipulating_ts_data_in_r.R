@@ -5,13 +5,13 @@
 ## Retrieved date: 08 May 2025
 
 
-## Install and load packages
+# Install and load packages
 
 ## Install
-install.packages("lubridate")
-install.packages("zoo")
-install.packages("xts")
-install.packages("ggplot2")
+install.packages("lubridate") # for data-time
+install.packages("zoo") # for data-time
+install.packages("xts") # for data-time
+install.packages("ggplot2") # for data visualisation
 
 ## Load
 library(lubridate)
