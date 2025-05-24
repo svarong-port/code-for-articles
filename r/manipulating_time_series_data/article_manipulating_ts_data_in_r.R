@@ -2,7 +2,7 @@
 
 ## Dataset: 
 ## URL: https://www.kaggle.com/datasets/shiivvvaam/bitcoin-historical-data
-## Retrieved date: 
+## Retrieved date: 08 May 2025
 
 
 ## Install and load packages
