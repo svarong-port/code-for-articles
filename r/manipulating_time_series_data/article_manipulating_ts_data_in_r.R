@@ -126,7 +126,7 @@ head(btc_zoo)
 ## Check for missing values
 anyNA(btc_zoo)
 
-## Count the missing values in each columns
+## Count the missing values in each column
 colSums(is.na(btc_zoo))
 
 ## Impute with na.approx()
