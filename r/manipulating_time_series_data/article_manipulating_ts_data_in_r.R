@@ -8,9 +8,9 @@
 # Install and load packages
 
 ## Install
-install.packages("lubridate") # for data-time
-install.packages("zoo") # for data-time
-install.packages("xts") # for data-time
+install.packages("lubridate") # for data-time conversion and formatting
+install.packages("zoo") # for time series manipulation
+install.packages("xts") # for time series manipulation
 install.packages("ggplot2") # for data visualisation
 
 ## Load
@@ -23,7 +23,7 @@ library(ggplot2)
 # ------------------------------
 
 
-# Load the data
+# Load the dataset
 
 ## Load
 btc <- read.csv("btc_hist_2010-2024.csv")
@@ -50,7 +50,7 @@ btc_cleaned <- btc
 new_col_names <- c("date",
                    "close", "open",
                    "high", "low",
-                   "volume", "change_percentage")
+                   "volume", "change")
 
 ### Rename
 colnames(btc_cleaned) <- new_col_names
@@ -78,9 +78,9 @@ btc_cleaned$volume <- gsub("K",
                            btc_cleaned$volume)
 
 ### Remove "%"
-btc_cleaned$change_percentage <- gsub("%",
-                                      "",
-                                      btc_cleaned$change_percentage)
+btc_cleaned$change <- gsub("%",
+                           "",
+                           btc_cleaned$change)
 
 ### Specify columns to convert to numeric
 cols_to_num <- colnames(btc_cleaned[, -1])
@@ -147,8 +147,8 @@ autoplot.zoo(btc_zoo[, "close"]) +
   
   ## Add title and labels
   labs(title = "Bitcoin Closing Price Over Time (2010–2024)",
-       x = "Date",
-       y = "Closing Price (USD)") +
+       x = "Time",
+       y = "Closing (USD)") +
   
   ## Use minimal theme
   theme_minimal()
@@ -173,9 +173,9 @@ autoplot.zoo(btc_winter_1[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Closing Price During 2021-2022 Crypto Winter",
-       x = "Date",
-       y = "Closing Price (USD)") +
+  labs(title = "Bitcoin Closing Price During the Crypto Winter (2021–2022)",
+       x = "Time",
+       y = "Closing (USD)") +
   
   ### Use minimal theme
   theme_minimal()
@@ -190,7 +190,7 @@ crypto_winter_index <-
 
 ### Subset
 btc_winter_2 <- btc_zoo[crypto_winter_index, ]
-  
+
 ### Plot the results
 autoplot.zoo(btc_winter_2[, "close"]) +  
   
@@ -198,9 +198,9 @@ autoplot.zoo(btc_winter_2[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Closing Price During 2021–2022 Crypto Winter",
-       x = "Date",
-       y = "Closing Price (USD)") +
+  labs(title = "Bitcoin Closing Price During the Crypto Winter (2021–2022)",
+       x = "Time",
+       y = "Closing (USD)") +
   
   ### Use minimal theme
   theme_minimal()
@@ -220,47 +220,67 @@ btc_first_halving
 
 # Aggregate data
 
-## Example 1. View yearly max price
-btc_yr_max <- apply.yearly(btc_zoo[, "close"],
-                           FUN = max)
+## Example 1. View yearly mean closing price
+btc_yr_mean <- apply.yearly(btc_zoo[, "close"],
+                            FUN = mean)
 
 ## Plot the results
-autoplot.zoo(btc_yr_max) +  
+autoplot.zoo(btc_yr_mean) +  
   
   ### Adjust line colour
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Yearly Maximum Closing Price (2010–2024)",
-       x = "Date",
-       y = "Closing Price (USD)") +
+  labs(title = "Bitcoin Yearly Mean Closing Price (2010–2024)",
+       x = "Time",
+       y = "Closing (USD)") +
   
   ### Use minimal theme
   theme_minimal()
 
 
-## Example 2. Create customised frequency
+## Example 2. View quarterly max closing price
+btc_qtr_max <- apply.quarterly(btc_zoo[, "close"],
+                               FUN = max)
 
-### Create half-year interval
-half_year_eps <- endpoints(x = btc_zoo,
-                           on = "months",
-                           k = 6)
-
-### Apply the interval
-btc_half_yr_data <- period.apply(x = btc_zoo[, "close"],
-                                 INDEX = half_year_eps,
-                                 FUN = mean)
-
-### Plot the results
-autoplot.zoo(btc_half_yr_data) +  
+## Plot the results
+autoplot.zoo(btc_qtr_max) +  
   
   ### Adjust line colour
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin 6-Month Average Closing Price (2010–2024)",
-       x = "Date",
-       y = "Closing Price (USD)") +
+  labs(title = "Bitcoin Quarterly Maximum Closing Price (2010–2024)",
+       x = "Time",
+       y = "Closing (USD)") +
+  
+  ### Use minimal theme
+  theme_minimal()
+
+
+
+## Example 3. Create customised frequency
+
+### Create 3-month interval
+three_month_eps <- endpoints(x = btc_zoo,
+                             on = "months",
+                             k = 3)
+
+### Apply the interval
+btc_three_month_data <- period.apply(x = btc_zoo[, "close"],
+                                     INDEX = three_month_eps,
+                                     FUN = mean)
+
+### Plot the results
+autoplot.zoo(btc_three_month_data) +  
+  
+  ### Adjust line colour
+  geom_line(color = "blue") +
+  
+  ### Add title and labels
+  labs(title = "Bitcoin 3-Month Average Closing Price (2010–2024)",
+       x = "Time",
+       y = "Closing (USD)") +
   
   ### Use minimal theme
   theme_minimal()
@@ -287,8 +307,8 @@ autoplot.zoo(btc_30_days_roll_mean[, "close"]) +
   
   ### Add title and labels
   labs(title = "Bitcoin 30-Day Rolling Mean Price (2010–2024)",
-       x = "Date",
-       y = "Closing Price (USD)") +
+       x = "Time",
+       y = "Closing (USD)") +
   
   ### Use minimal theme
   theme_minimal()
@@ -311,8 +331,8 @@ autoplot.zoo(btc_30_days_roll_min[, "close"]) +
   
   ### Add title and labels
   labs(title = "Bitcoin 30-Day Rolling Minimum Price (2010–2024)",
-       x = "Date",
-       y = "Closing Price (USD)") +
+       x = "Time",
+       y = "Closing (USD)") +
   
   ### Use minimal theme
   theme_minimal()
@@ -323,17 +343,17 @@ autoplot.zoo(btc_30_days_roll_min[, "close"]) +
 
 # Expanding window
 
-## Subset for 2024 data
-btc_2024 <- window(x = btc_zoo,
-                   start = as.Date("2024-01-01"),
-                   end = as.Date("2024-02-09"))
+## Subset for Jan 2024 data
+btc_jan_2024 <- window(x = btc_zoo,
+                       start = as.Date("2024-01-01"),
+                       end = as.Date("2024-01-31"))
 
 ## Create a sequence of widths
-btc_width <- seq_along(btc_2024)
+btc_jan_2024_width <- seq_along(btc_jan_2024)
 
 ## Create an expanding window for mean price
 btc_exp_mean <- rollapply(data = btc_2024,
-                          width = btc_width,
+                          width = btc_jan_2024_width,
                           FUN = mean,
                           align = "right",
                           fill = NA)
@@ -345,9 +365,9 @@ autoplot.zoo(btc_exp_mean[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Expanding Mean Price (Jan–Feb, 2024)",
-       x = "Date",
-       y = "Closing Price (USD)") +
+  labs(title = "Bitcoin Expanding Mean Price (Jan 2024)",
+       x = "Time",
+       y = "Closing (USD)") +
   
   ### Use minimal theme
   theme_minimal()
