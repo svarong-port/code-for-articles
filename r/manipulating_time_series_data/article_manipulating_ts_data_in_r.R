@@ -146,7 +146,7 @@ autoplot.zoo(btc_zoo[, "close"]) +
   geom_line(color = "blue") +
   
   ## Add title and labels
-  labs(title = "Bitcoin Closing Price Over Time (2010-2024)",
+  labs(title = "Bitcoin Closing Price Over Time (2010–2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -198,7 +198,7 @@ autoplot.zoo(btc_winter_2[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Closing Price During 2021-2022 Crypto Winter",
+  labs(title = "Bitcoin Closing Price During 2021–2022 Crypto Winter",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -231,7 +231,7 @@ autoplot.zoo(btc_yr_max) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Yearly Maximum Closing Price (2010-2024)",
+  labs(title = "Bitcoin Yearly Maximum Closing Price (2010–2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -258,7 +258,7 @@ autoplot.zoo(btc_half_yr_data) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin 6-Month Average Closing Price (2010-2024)",
+  labs(title = "Bitcoin 6-Month Average Closing Price (2010–2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -286,7 +286,7 @@ autoplot.zoo(btc_30_days_roll_mean[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin 30-Day Rolling Mean Price (2010-2024)",
+  labs(title = "Bitcoin 30-Day Rolling Mean Price (2010–2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -310,7 +310,7 @@ autoplot.zoo(btc_30_days_roll_min[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin 30-Day Rolling Minimum Price (2010-2024)",
+  labs(title = "Bitcoin 30-Day Rolling Minimum Price (2010–2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
@@ -345,7 +345,7 @@ autoplot.zoo(btc_exp_mean[, "close"]) +
   geom_line(color = "blue") +
   
   ### Add title and labels
-  labs(title = "Bitcoin Expanding Mean Price (Jan-Feb, 2024)",
+  labs(title = "Bitcoin Expanding Mean Price (Jan–Feb, 2024)",
        x = "Date",
        y = "Closing Price (USD)") +
   
