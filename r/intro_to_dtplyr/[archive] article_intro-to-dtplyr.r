@@ -1,5 +1,10 @@
 # Code for "Intro to dtplyr" Article
 
+## Data
+## Name: 🚗Car Market Dataset 📊 100k+ Vehicles
+## URL: https://www.kaggle.com/datasets/zain280/car-dataset
+## Retrieved Date: 03 Jun 2025
+
 
 # --------------------------
 
@@ -12,8 +17,6 @@ install.packages("dtplyr")
 install.packages("data.table")
 install.packages("tibble")
 install.packages("microbenchmark")
-install.packages("ggplot2")
-install.packages("nycflights13")
 
 ## Load
 library(dplyr)
@@ -21,23 +24,56 @@ library(dtplyr)
 library(data.table)
 library(tibble)
 library(microbenchmark)
-library(ggplot2)
-library(nycflights13)
 
 
 # --------------------------
 
 
-# Preview the dataset
+# Load the dataset
 
-## Convert flights dataset into data.table object
-flights_dt <- as.data.table(flights)
+## Load
+cars <- read.csv("Car_Data.csv")
 
-## View the first 6 rows
-head(flights_dt)
+## Preview
+head(cars)
 
-## Glimpse
-glimpse(flights_dt)
+## View the structure
+glimpse(cars)
+
+
+# --------------------------
+
+
+# Prepare the dataset
+
+## Define columns to convert to factor
+fac_cols <- c("Brand",
+              "Model",
+              "Color",
+              "Condition")
+
+## Convert the columns to factor
+cars <- cars |>
+  mutate(across(.cols = all_of(fac_cols),
+                .fns = as.factor))
+
+## Check the results
+glimpse(cars)
+
+
+# --------------------------
+
+
+# Convert dataset into data.table object
+
+## Convert
+cars_dt <- as.data.table(cars)
+
+## Preview
+head(cars_dt)
+
+## View the structure
+glimpse(cars_dt)
 
 
 # --------------------------
@@ -46,14 +82,30 @@ glimpse(flights_dt)
 
 # dplyr vs data.table syntax
 
+## Find mean mileage and price for used vs new in 1994
+
 ## dplyr
-flights |>
-  select(flight, distance) |>
-  filter(distance >= 1000) |>
-  arrange(desc(distance))
+cars |>
+  
+  ## Filter for year 1994
+  filter(Year == 1994) |>
+  
+  ## Group by condition
+  group_by(Condition) |>
+  
+  ## Compute mean mileage and price
+  summarise(mean_mileage = mean(Mileage),
+            mean_price = mean(Price)) |>
+  
+  ## Arrange by condition
+  arrange(desc(Condition))
+
 
 ## data.table
-flights_dt[distance >= 1000, .(flight, distance)][order(-distance)]
+cars_dt[Year == 1994,
+        .(mean_mileage = mean(Mileage),
+          mean_price = mean(Price)),
+        by = Condition][order(-Condition)]
 
 
 # --------------------------
@@ -61,56 +113,105 @@ flights_dt[distance >= 1000, .(flight, distance)][order(-distance)]
 
 # Working with dtplyr
 
-## Convert flights dataset into lazy data.table object
-flights_ldt <- lazy_dt(flights)
+## Convert mtcars dataset into lazy data.table object
+cars_ldt <- lazy_dt(cars)
 
 ## Execute the syntax
-flights_ldt |>
-  select(flight, distance) |>
-  filter(distance >= 1000) |>
-  arrange(desc(distance)) |>
+cars_ldt |>
+  
+  ## Filter for year 1994
+  filter(Year == 1994) |>
+  
+  ## Group by condition
+  group_by(Condition) |>
+  
+  ## Compute mean mileage and price
+  summarise(mean_mileage = mean(Mileage),
+            mean_price = mean(Price)) |>
+  
+  ## Arrange by condition
+  arrange(desc(Condition)) |>
+  
+  ## Show the results
   as.data.table()
 
 ## Execute the syntax, without as.data.table()
-flights_ldt |>
-  select(flight, distance) |>
-  filter(distance >= 1000) |>
-  arrange(desc(distance))
+cars_ldt |>
+  
+  ## Filter for year 1994
+  filter(Year == 1994) |>
+  
+  ## Group by condition
+  group_by(Condition) |>
+  
+  ## Compute mean mileage and price
+  summarise(mean_mileage = mean(Mileage),
+            mean_price = mean(Price)) |>
+  
+  ## Arrange by condition
+  arrange(desc(Condition))
 
 
 # --------------------------
 
 
-# dyplr speed test
-
-## dplyr
-dplyr_syntax <- function() {
-  flights |>
-    select(flight, distance) |>
-    filter(distance >= 1000) |>
-    arrange(desc(distance))
-}
-
-## dtplyr
-dtplyr_syntax <- function() {
-  flights_ldt |>
-    select(flight, distance) |>
-    filter(distance >= 1000) |>
-    arrange(desc(distance)) |>
-    as.data.table()
-}
-
-## data.table
-data_table_syntax <- function() {
-  flights_dt[distance >= 1000, .(flight, distance)][order(-distance)]
-}
-
-## Compare speed
-results <- microbenchmark(
-  dplyr = dplyr_syntax(),
-  dtplyr = dtplyr_syntax(),
-  data_table = data_table_syntax(),
-  times = 100
+# Time the computation
+benchmark_results <- microbenchmark(
+  
+  ## Set dplyr code
+  dplyr_code = {
+    
+    cars |>
+      
+      ## Filter for year 1994
+      filter(Year == 1994) |>
+      
+      ## Group by condition
+      group_by(Condition) |>
+      
+      ## Compute mean mileage and price
+      summarise(mean_mileage = mean(Mileage),
+                mean_price = mean(Price)) |>
+      
+      ## Arrange by condition
+      arrange(desc(Condition))
+  },
+  
+  ## Set data.table code
+  dt_code = {
+    cars_dt[Year == 1994,
+            .(mean_mileage = mean(Mileage),
+              mean_price = mean(Price)),
+            by = Condition][order(-Condition)]
+  },
+  
+  ## Set dtplyr
+  dtplyr_code = {
+    cars_ldt |>
+      
+      ## Filter for year 1994
+      filter(Year == 1994) |>
+      
+      ## Group by condition
+      group_by(Condition) |>
+      
+      ## Compute mean mileage and price
+      summarise(mean_mileage = mean(Mileage),
+                mean_price = mean(Price)) |>
+      
+      ## Arrange by condition
+      arrange(desc(Condition)) |>
+      
+      ## Show the results
+      as.data.table()
+  },
+  
+  ## Set rounds to execute
+  times = 100,
+  
+  ## Set unit to display the results
+  unit = "ms"
 )
 
-print(results)
+## Show the results
+benchmark_results
