@@ -14,11 +14,52 @@ library(ggfortify)
 # --------------------------------------------
 
 
-# Get Apple symbol
+# getSymbols basics
+
+# auto.assign argument
+
+# auto.assign = TRUE
 getSymbols("AAPL",
            src = "yahoo",
            from = "2025-01-01",
-           to = "2025-05-31")
+           to = "2025-05-31",
+           auto.assign = TRUE)
+
+# View the results
+head(AAPL)
+
+
+# auto.assign = FALSE
+AAPL_2025 <- getSymbols("AAPL",
+                        src = "yahoo",
+                        from = "2025-01-01",
+                        to = "2025-05-31",
+                        auto.assign = FALSE)
+
+# View the results
+head(AAPL_2025)
+
+
+# Environment
+env_2025 <- new.env()
+
+
+# Create data in the environment
+getSymbols("AAPL",
+           src = "yahoo",
+           from = "2025-01-01",
+           to = "2025-05-31",
+           env = env_2025)
+
+# View the results
+head(env_2025$AAPL)
+
+
+# --------------------------------------------
+
+
+
+# Assess the data
 
 # View Apple data
 AAPL
@@ -44,6 +85,16 @@ Vo(AAPL)
 
 # --------------------------------------------
 
+
+# Set defaults
+
+
+
+
+# --------------------------------------------
+
+
+# Plot the data
 
 # Plot all Apple data
 autoplot(AAPL,
