@@ -3,139 +3,209 @@
 # Install the package
 install.packages("quantmod")
 install.packages("ggplot2")
-install.packages("ggfortify")
 
 # Load the package
 library(quantmod)
 library(ggplot2)
-library(ggfortify)
 
 
-# --------------------------------------------
+# ---------------------------------------------------
 
 
-# getSymbols basics
+# 1. getSymbols() Basics
 
-# auto.assign argument
+# 1.1 src
 
-# auto.assign = TRUE
-getSymbols("AAPL",
-           src = "yahoo",
-           from = "2025-01-01",
-           to = "2025-05-31",
-           auto.assign = TRUE)
+# 1.1.1 Load data from online source
+getSymbols("AAPL", src = "yahoo")
 
-# View the results
+# Print result
+head(AAPL)
+
+# 1.1.2 Load csv data
+getSymbols("AAPL", src = "csv")
+
+# Print result
 head(AAPL)
 
 
-# auto.assign = FALSE
-AAPL_2025 <- getSymbols("AAPL",
-                        src = "yahoo",
-                        from = "2025-01-01",
-                        to = "2025-05-31",
+# 1.2 auto.assign
+
+# 1.2.1 Set to FALSE to assign to custom variable
+aapl_data <- getSymbols("AAPL",
+                        src = "csv",
                         auto.assign = FALSE)
 
-# View the results
-head(AAPL_2025)
+# 1.3 new.env
 
+# 1.3.1 Create a local environment to store data
 
-# Environment
-env_2025 <- new.env()
+# Create a new environment
+my_env <- new.env()
 
-
-# Create data in the environment
+# Load data onto environment
 getSymbols("AAPL",
-           src = "yahoo",
-           from = "2025-01-01",
-           to = "2025-05-31",
-           env = env_2025)
+           src = "csv",
+           env = my_env)
 
-# View the results
-head(env_2025$AAPL)
+# List all variables in environment
+ls(envir = my_env)
 
-
-# --------------------------------------------
+# Show data
+head(my_env$AAPL)
 
 
+# ---------------------------------------------------
 
-# Assess the data
 
-# View Apple data
-AAPL
+# 2. View specific columns
 
-# Get adjusted price
-Ad(AAPL)
-
-# Get high price
-Hi(AAPL)
-
-# Get low price
-Lo(AAPL)
-
-# Get opening price
+# 2.1 Opening price
 Op(AAPL)
 
-# Get closing price
-Cl(AAPL)
+# 2.2 Highest price
+Hi(AAPL)
 
-# Get volumne
+# 2.3 Lowest price
+Lo(AAPL)
+
+# 2.4 Closing price
+Cl(APPL)
+
+# 2.5 Adjusted price
+Ad(AAPL)
+
+# 2.6 Volume
 Vo(AAPL)
 
+# 2.7 All price
+OHLC(AAPL)
 
-# --------------------------------------------
 
+# ---------------------------------------------------
+
+
+# 3. Plotting
+
+# 3.1 autoplot()
+autoplot(Cl(AAPL),
+         ts.colour = "darkgreen") +
+  
+  # Set theme to minimal
+  theme_minimal() +
+  
+  # Add text
+  labs(title = "AAPL Closing Price (USD)",
+       x = "Time",
+       y = "Price (USD)")
+
+# 3.2 chartSeries()
+chartSeries(Cl(AAPL))
+
+
+# ---------------------------------------------------
+
+
+# 4. Set defaults
+
+# 4.1 Set and get defaults for getSymbols()
+
+# Get defaults
+getDefaults(getSymbols)
 
 # Set defaults
+setDefaults(getSymbols,
+            src = "yahoo",
+            auto.assign = FALSE)
+
+# Check defaults
+getDefaults(getSymbols)
+
+# 4.2 Set and get defaults for specific instrument
+
+# Set default for Google
+setSymbolLookup(GOOG = list(src = "google"))
+
+# Get default
+getSymbolLookup()
+
+# 4.3 Save and load defaults
+
+# Save defaults
+saveSymbolLookup(file = "symbols.rds")
+
+# Load defaults
+loadSymbolLookup(file = "symbols.rds")
 
 
+# ---------------------------------------------------
 
 
-# --------------------------------------------
+# 5. Aggregating
+
+# 5.1 Fixed interval
+monthly_data <- apply.monthly(Cl(AAPL),
+                              FUN = mean)
+
+# 5.2 Custom interval
+
+# Creat end points
+end_points <- endpoints(Cl(AAPL),
+                        on = "weeks")
+
+# Calculate
+weekly_avg <- period.apply(Cl(AAPL),
+                           INDEX = end_points,
+                           FUN = mean)
 
 
-# Plot the data
-
-# Plot all Apple data
-autoplot(AAPL,
-         ts.colour = "darkblue") +
-  
-  ## Add title and labels
-  labs(title = "Apple Stock Data (Jan–May 2025)",
-       x = "Time") +
-  
-  ## Set minimal theme
-  theme_minimal()
+# ---------------------------------------------------
 
 
-# Plot multiple columns
-autoplot(AAPL,
-         columns = c("AAPL.Low", "AAPL.High"),
-         facet = FALSE) +
-  
-  ## Add title and labels
-  labs(title = "Apple Stock Low & High Price (Jan–May 2025)",
-       x = "Date",
-       y = "Price") +
-  
-  ## Set minimal theme
-  theme_minimal()
+# 6. Adjust price
+
+# 6.1 Auto-adjust
+adjusted_price_auto <- adjustOHLC(AAPL)
+
+# Print result
+head(adjusted_price_auto)
+
+# 6.2 Manually
+
+# Get splits
+splits <- getSplits("AAPL")
+
+# Get dividends
+dividends <- getDividends("AAPL", split.adjust = FALSE)
+
+# Get adjust ratios
+adj_ratios <- adjRatios(splits,
+                        dividends,
+                        Cl(APPL))
+
+# Calculate adjusted price
+adjusted_price_manual <- Cl(AAPL) * adj_ratios[, "Split"] * adj_ratios[, "Div"]
+
+# Print result
+head(adjusted_price_manual)
+
+# Print adjusted price
+head(Ad(AAPL))
 
 
-# Plot a specific column
-autoplot(AAPL,
-         columns = "AAPL.High",
-         ts.colour = "darkblue") +
-  
-  ## Add title and labels
-  labs(title = "Apple Stock High Price (Jan–May 2025)",
-       x = "Date",
-       y = "Price") +
-  
-  ## Set minimal theme
-  theme_minimal()
+# ---------------------------------------------------
 
 
-# --------------------------------------------
+# 7. Fill NA
 
+# 7.1 Check for NA
+colSums(is.na(AAPL))
 
+# 7.2 LOCF
+aapl_locf <- na.locf(AAPL)
+
+# 7.3 spline
+aapl_spline <- na.spline(AAPL)
+
+# 7.4 approx
+aapl_approx <- na.approx(AAPL)
