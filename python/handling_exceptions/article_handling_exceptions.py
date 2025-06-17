@@ -1,47 +1,43 @@
 # Code for Handling Exceptions in Python
 
-# Define function to process payment
-def process_payment(amount):
+# Set payment
+payment = "one thousand"
 
-    # Check for negative payment
-    if amount <= 0:
-        raise ValueError("Amount must be greater than zero.")
+# 1. try, except
+try:
+    payment >= 0
+except TypeError:
+    print("Payment must be a number.")
 
-    # Check for large payment
-    if amount > 10000:
-        raise Exception("Payment gateway limit exceeded.")
+# Set payment
+payment = 500
 
-# Set order amount
-orders = {"Alex": -10,
-          "Ben": 5000,
-          "Carter": 20000,}
+# 2. else
+try:
+    payment >= 0
+except TypeError:
+    print("Payment must be a number.")
+else:
+    print("Processing payment ...")
 
-# Validate payment
-for key in orders:
+# 3. finally
+try:
+    payment >= 0
+except TypeError:
+    print("Payment must be a number.")
+else:
+    print("Processing payment ...")
+finally:
+    print("Your order will be confirmed shortly.")
 
-    # Print the customer's name
-    print(f"{key}: {orders[key]}")
-
-    # Try block
-    try:
-        print("Processing your payment ...")
-        payment_success = process_payment(orders[key])
-
-    # Exception block: value error
-    except ValueError as ve:
-        print(f"Payment failed: {ve}")
-
-    # Exception block: exception
-    except Exception as e:
-        print(f"Something went wrong during payment: {e}")
-
-    # Else block
-    else:
-        print("Payment successful! Your order is confirmed.")
-
-    # Finally block
-    finally:
-        print("Thank you for shopping with us.")
-
-    # Print divider
-    print("-------------------------------------------------------")
+# 4. raise
+try:
+    payment = float(payment_input)
+    if payment <= 0:
+        raise ValueError("Payment must be greater than 0.")
+except:
+    TypeError("Payment must be a number.")
+else:
+    print("Processing payment ...")
+finally:
+    print("Thank you for your payment.")
