@@ -1,10 +1,10 @@
 # Code for Importing Financial Data in R
 
-# Install the package
+# Install the packages
 install.packages("quantmod")
 install.packages("ggplot2")
 
-# Load the package
+# Load the packages
 library(quantmod)
 library(ggplot2)
 
@@ -14,44 +14,49 @@ library(ggplot2)
 
 # 1. getSymbols() Basics
 
-# 1.1 src
-
-# 1.1.1 Load data from online source
-getSymbols("AAPL", src = "yahoo")
+# 1.1 Symbols
+getSymbols("AAPL")
 
 # Print result
 head(AAPL)
 
-# 1.1.2 Load csv data
+# 1.2 src
+
+# 1.2.1 Load data from online source
+getSymbols("AAPL", src = "FRED")
+
+# Print result
+head(AAPL)
+
+# 1.2.2 Load csv data
 getSymbols("AAPL", src = "csv")
 
 # Print result
 head(AAPL)
 
 
-# 1.2 auto.assign
+# 1.3 auto.assign
 
-# 1.2.1 Set to FALSE to assign to custom variable
-aapl_data <- getSymbols("AAPL",
-                        src = "csv",
-                        auto.assign = FALSE)
+# 1.3.1 Set to FALSE to assign to custom variable
+apple_data <- getSymbols("AAPL", auto.assign = FALSE)
 
-# 1.3 new.env
+# 1.3.2 Set to FALSE without variable assignment
+getSymbols("AAPL", auto.assign = FALSE)
 
-# 1.3.1 Create a local environment to store data
+# 1.4 new.env
+
+# 1.4.1 Create a local environment to store data
 
 # Create a new environment
 my_env <- new.env()
 
-# Load data onto environment
-getSymbols("AAPL",
-           src = "csv",
-           env = my_env)
+# Load data into the environment
+getSymbols("AAPL", env = my_env)
 
 # List all variables in environment
 ls(envir = my_env)
 
-# Show data
+# Show Apple data
 head(my_env$AAPL)
 
 
