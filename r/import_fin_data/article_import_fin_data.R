@@ -15,7 +15,15 @@ library(ggplot2)
 # 1. getSymbols() Basics
 
 # 1.1 Symbols
+
+# 1.1.1 Load single instrument
 getSymbols("AAPL")
+
+# Print result
+head(AAPL)
+
+# 1.1.2 Load multiple instruments
+getSymbols(c("AAPL", "GOOGL", "MSFT", "NVDA"))
 
 # Print result
 head(AAPL)
@@ -59,82 +67,65 @@ ls(envir = my_env)
 # Show Apple data
 head(my_env$AAPL)
 
+# 1.5 from, to
+apple_data_2025_05 = getSymbols("AAPL",
+                                auto.assign = FALSE,
+                                from = "2025-05-01",
+                                to = "2025-05-31")
 
-# ---------------------------------------------------
-
-
-# 2. View specific columns
-
-# 2.1 Opening price
-Op(AAPL)
-
-# 2.2 Highest price
-Hi(AAPL)
-
-# 2.3 Lowest price
-Lo(AAPL)
-
-# 2.4 Closing price
-Cl(APPL)
-
-# 2.5 Adjusted price
-Ad(AAPL)
-
-# 2.6 Volume
-Vo(AAPL)
-
-# 2.7 All price
-OHLC(AAPL)
+# Print results
+print("First three records:")
+head(apple_data_2025_05, n = 3)
+print("------------------------------------------------------------------------------")
+print("Last three records:")
+tail(apple_data_2025_05, n = 3)
 
 
 # ---------------------------------------------------
 
 
-# 3. Plotting
+# 2. Set defaults
 
-# 3.1 autoplot()
-autoplot(Cl(AAPL),
-         ts.colour = "darkgreen") +
-  
-  # Set theme to minimal
-  theme_minimal() +
-  
-  # Add text
-  labs(title = "AAPL Closing Price (USD)",
-       x = "Time",
-       y = "Price (USD)")
+# 2.1 Set and get defaults for getSymbols()
 
-# 3.2 chartSeries()
-chartSeries(Cl(AAPL))
-
-
-# ---------------------------------------------------
-
-
-# 4. Set defaults
-
-# 4.1 Set and get defaults for getSymbols()
-
-# Get defaults
+# Get defaults before changing
+print("Defaults (before):")
 getDefaults(getSymbols)
 
 # Set defaults
 setDefaults(getSymbols,
-            src = "yahoo",
+            src = "FRED",
             auto.assign = FALSE)
 
-# Check defaults
+# Check defaults after changing
+print("Defaults (after):")
 getDefaults(getSymbols)
 
-# 4.2 Set and get defaults for specific instrument
+# Reset defaults
+setDefaults(getSymbols, 
+            src = NULL,
+            auto.assign = NULL)
+
+# Check defaults after resetting
+getDefaults(getSymbols)
+
+
+# 2.2 Set and get defaults for specific instrument
 
 # Set default for Google
 setSymbolLookup(GOOG = list(src = "google"))
 
-# Get default
+# Get new defaults
 getSymbolLookup()
 
-# 4.3 Save and load defaults
+# Reset defaults
+setSymbolLookup(GOOG = NULL)
+
+# Get defaults after resetting
+getSymbolLookup()
+
+
+# 2.3 Save and load defaults
 
 # Save defaults
 saveSymbolLookup(file = "symbols.rds")
@@ -146,71 +137,43 @@ loadSymbolLookup(file = "symbols.rds")
 # ---------------------------------------------------
 
 
-# 5. Aggregating
+# 3. View specific columns
 
-# 5.1 Fixed interval
-monthly_data <- apply.monthly(Cl(AAPL),
-                              FUN = mean)
+# 3.1 Opening price
+Op(AAPL)
 
-# 5.2 Custom interval
+# 3.2 Highest price
+Hi(AAPL)
 
-# Creat end points
-end_points <- endpoints(Cl(AAPL),
-                        on = "weeks")
+# 3.3 Lowest price
+Lo(AAPL)
 
-# Calculate
-weekly_avg <- period.apply(Cl(AAPL),
-                           INDEX = end_points,
-                           FUN = mean)
+# 3.4 Closing price
+Cl(AAPL)
 
+# 3.5 Adjusted price
+Ad(AAPL)
 
-# ---------------------------------------------------
+# 3.6 Volume
+Vo(AAPL)
 
-
-# 6. Adjust price
-
-# 6.1 Auto-adjust
-adjusted_price_auto <- adjustOHLC(AAPL)
-
-# Print result
-head(adjusted_price_auto)
-
-# 6.2 Manually
-
-# Get splits
-splits <- getSplits("AAPL")
-
-# Get dividends
-dividends <- getDividends("AAPL", split.adjust = FALSE)
-
-# Get adjust ratios
-adj_ratios <- adjRatios(splits,
-                        dividends,
-                        Cl(APPL))
-
-# Calculate adjusted price
-adjusted_price_manual <- Cl(AAPL) * adj_ratios[, "Split"] * adj_ratios[, "Div"]
-
-# Print result
-head(adjusted_price_manual)
-
-# Print adjusted price
-head(Ad(AAPL))
+# 3.7 All price
+OHLC(AAPL)
 
 
 # ---------------------------------------------------
 
 
-# 7. Fill NA
+# 4. Plotting
 
-# 7.1 Check for NA
-colSums(is.na(AAPL))
+# 4.1 autoplot()
+autoplot(Cl(AAPL),
+         ts.colour = "darkgreen") +
+  
+  # Add text
+  labs(title = "AAPL Closing Price (Jan 2007 – Jun 2025)",
+       x = "Time",
+       y = "Price (USD)")
 
-# 7.2 LOCF
-aapl_locf <- na.locf(AAPL)
-
-# 7.3 spline
-aapl_spline <- na.spline(AAPL)
-
-# 7.4 approx
-aapl_approx <- na.approx(AAPL)
+# 4.2 chartSeries()
+chartSeries(Cl(AAPL))
