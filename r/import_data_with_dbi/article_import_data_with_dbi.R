@@ -14,7 +14,7 @@ library("RSQLite")
 # --------------------------------------------------------------
 
 
-# Connect to database
+# Connect to the database
 con <- dbConnect(RSQLite::SQLite(),
                  "chinook.sqlite")
 
