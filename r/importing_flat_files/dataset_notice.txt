@@ -1,0 +1,4 @@
+Chocolate Bar Ratings is used under the [Open Data Commons Open Database License (ODbL) v1.0](https://opendatacommons.org/licenses/odbl/1-0/).
+- **“chocolate_bars.csv”** is an exact copy of [the original dataset](https://www.kaggle.com/datasets/evangower/chocolate-bar-ratings).
+- **“chocolate_bars.tsv”** is a modified version where the “,” separator is replaced with “\t”.
+- **“chocolate_bars.txt”** is a modified version where the “,” separator is replaced with “;”.
