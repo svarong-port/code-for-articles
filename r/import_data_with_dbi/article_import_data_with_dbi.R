@@ -56,60 +56,52 @@ dbReadTable(con,
 
 # Example 1
 dbGetQuery(con,
-           "
-           SELECT
-             CustomerId,
-             FirstName,
-             LastName, Email
-           FROM
-             Customer
-           WHERE
-             country = 'Brazil';
-           ")
+           "SELECT
+              CustomerId,
+              FirstName,
+              LastName, Email
+            FROM
+              Customer
+            WHERE
+              country = 'Brazil';")
 
 # Example 2
 dbGetQuery(con,
-           "
-           SELECT
-             BillingCountry,
-             SUM(Total) AS TotalSales
-           FROM
-             Invoice
-           GROUP BY
-             BillingCountry
-           ORDER BY
-             TotalSales DESC;
-           ")
+           "SELECT
+              BillingCountry,
+              SUM(Total) AS TotalSales
+            FROM
+              Invoice
+            GROUP BY
+              BillingCountry
+            ORDER BY
+              TotalSales DESC;")
 
 # Example 3
 dbGetQuery(con,
-           "
-           SELECT
-             T.Name AS TrackName,
-             A.Title AS AlbumTitle
-           FROM
-             Track AS T
-           JOIN
-             Album AS A ON T.AlbumID = A.AlbumID
-           LIMIT 10;
-           ")
+           "SELECT
+              T.Name AS TrackName,
+              A.Title AS AlbumTitle
+            FROM
+              Track AS T
+            JOIN
+              Album AS A ON T.AlbumID = A.AlbumID
+            LIMIT 10;")
 
 
 # Query with dbSendQuery()
 
 # Send query
 res <- dbSendQuery(con,
-                   "
-                   SELECT
-                     CustomerId,
-                     LastName,
-                     FirstName,
-                     Email
-                   FROM
-                     Customer
-                   ORDER BY
-                     LastName;
-                   ")
+                   "SELECT
+                      CustomerId,
+                      LastName,
+                      FirstName,
+                      Email
+                    FROM
+                      Customer
+                    ORDER BY
+                      LastName;")
 
 # Fetch all
 dbFetch(res)
@@ -117,17 +109,15 @@ dbFetch(res)
 
 # Send query
 res <- dbSendQuery(con,
-                   "
-                   SELECT
-                     CustomerId,
-                     LastName,
-                     FirstName,
-                     Email
-                   FROM
-                     Customer
-                   ORDER BY
-                     LastName;
-                   ")
+                   "SELECT
+                      CustomerId,
+                      LastName,
+                      FirstName,
+                      Email
+                    FROM
+                      Customer
+                    ORDER BY
+                      LastName;")
 
 # Fetch five
 dbFetch(res, n = 5)
