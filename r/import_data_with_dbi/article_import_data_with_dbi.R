@@ -14,7 +14,7 @@ library("RSQLite")
 # --------------------------------------------------------------
 
 
-# Connect to the database
+# Connect to database
 con <- dbConnect(RSQLite::SQLite(),
                  "chinook.sqlite")
 
@@ -22,12 +22,33 @@ con <- dbConnect(RSQLite::SQLite(),
 # List tables in the database
 dbListTables(con)
 
-# Read a table
-dbReadTable(con, "Genre")
-
 # List columns in a table
 dbGetQuery(con,
            "PRAGMA table_info(Artist)")
+
+# List columns in all tables
+
+# Get the table list
+tables <- dbListTables(con)
+
+# Get all columns
+for (table_name in tables) {
+  
+  # Print the table name
+  message(paste0("\nTable: ", table_name))
+  
+  # Get the columns
+  column_info <- dbGetQuery(con,
+                            paste0("PRAGMA table_info(",
+                                   table_name, 
+                                   ")"))
+  
+  # Print the columns
+  print(column_info)
+}
+
+# Read a table
+dbReadTable(con, "Genre")
 
 
 # Query with dbGetQuery()
