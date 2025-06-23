@@ -35,7 +35,7 @@ tables <- dbListTables(con)
 for (table_name in tables) {
   
   # Print the table name
-  message(paste0("\nTable: ", table_name))
+  message(paste0("\n👉 Table: ", table_name))
   
   # Get the columns
   column_info <- dbGetQuery(con,
@@ -101,7 +101,8 @@ res <- dbSendQuery(con,
                     FROM
                       Customer
                     ORDER BY
-                      LastName;")
+                      LastName
+                    LIMIT 10;")
 
 # Fetch all
 dbFetch(res)
@@ -117,12 +118,14 @@ res <- dbSendQuery(con,
                     FROM
                       Customer
                     ORDER BY
-                      LastName;")
+                      LastName
+                    LIMIT 10;")
 
-# Fetch five
+# Fetch five, thrice
+dbFetch(res, n = 5)
 dbFetch(res, n = 5)
 dbFetch(res, n = 5)
 
 
 # Close the connection
-dbDisconnect()
+dbDisconnect(con)
