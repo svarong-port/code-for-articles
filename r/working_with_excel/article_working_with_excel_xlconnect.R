@@ -23,7 +23,7 @@ library(dplyr)
 # -------------------------------------------
 
 
-# Load Excel
+# Load the workbook
 workbook <- loadWorkbook("Daily Household Transactions.xlsx")
 
 # List sheets
@@ -44,17 +44,26 @@ head(sheet1_data)
 # -------------------------------------------
 
 
-# Create a new sheet
+# Create new sheets
 createSheet(workbook,
             name = "New")
 
 # List sheets
 getSheets(workbook)
 
+
 # Rename the new sheet
 renameSheet(workbook,
             sheet = "New",
-            newName = "Expense by Catogory")
+            newName = "Some Transactions")
+
+# List sheets
+getSheets(workbook)
+
+
+# Delete the new sheet
+removeSheet(workbook,
+            sheet = "Some Transactions")
 
 # List sheets
 getSheets(workbook)
@@ -86,21 +95,18 @@ expense_by_cat <- sheet1_data |>
 # View the results
 expense_by_cat
 
+# Create a new sheet
+createSheet(workbook,
+            name = "Expense by Category")
+
 # Add data to "Expense by Catogory" sheet
 writeWorksheet(workbook,
                data = expense_by_cat,
-               sheet = "Expense by Catogory")
+               sheet = "Expense by Category")
 
-
-# -------------------------------------------
-
-
-# Delete sheet
-removeSheet(workbook,
-            sheet = "All Transactions")
-
-# List sheets
-getSheets(workbook)
+# Read the sheet
+readWorksheet(workbook,
+              sheet = "Expense by Category")
 
 
 # -------------------------------------------
@@ -108,4 +114,4 @@ getSheets(workbook)
 
 # Save the file
 saveWorkbook(workbook,
-             file = "Expense Summary.xlsx")
+             file = "Daily Household Transactions (Updated).xlsx")
