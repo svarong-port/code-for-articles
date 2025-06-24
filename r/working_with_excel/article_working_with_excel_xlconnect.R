@@ -1,4 +1,4 @@
-# Code for Working With Excel in R
+# Code for Working With Excel in R - XLConnect
 
 # Install and load packages
 
