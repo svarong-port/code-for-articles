@@ -10,7 +10,6 @@ write.table(nutrition_csv,
             row.names = FALSE,
             quote = TRUE)
 
-
 # Write CSV to TXT with "/" as separator
 write.table(nutrition_csv,
             "Nutrition_Value_Dataset.txt",
