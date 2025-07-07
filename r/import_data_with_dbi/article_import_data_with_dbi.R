@@ -126,6 +126,8 @@ dbFetch(res, n = 5)
 dbFetch(res, n = 5)
 dbFetch(res, n = 5)
 
+# Clear results
+dbClearResult()
 
 # Close the connection
 dbDisconnect(con)
