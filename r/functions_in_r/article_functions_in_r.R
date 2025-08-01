@@ -17,11 +17,11 @@ sample(1:10, 3)
 sample(x = 1:10, size = 3)
 
 
-# Read about mean()
-?mean
+# Read round() documentation
+?round
 
-# Learn about arguments for mean()
-args(mean)
+# Learn about round() arguments
+args(round)
 
 
 # Data frame of my friends
