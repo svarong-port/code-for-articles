@@ -27,7 +27,7 @@ tracks <- tbl(con, "Track")
 tracks
 
 
-# Working with database table
+# Create query
 album_info <- tracks |>
   
   # Group by album
