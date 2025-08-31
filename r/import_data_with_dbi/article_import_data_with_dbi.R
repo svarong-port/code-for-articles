@@ -7,8 +7,8 @@ install.packages("DBI")
 install.packages("RSQLite")
 
 # Load
-library("DBI")
-library("RSQLite")
+library(DBI)
+library(RSQLite)
 
 
 # --------------------------------------------------------------
