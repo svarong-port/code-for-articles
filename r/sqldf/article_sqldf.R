@@ -48,7 +48,7 @@ SELECT
 FROM
   Cars93
 WHERE
-  Origin = 'non-USA';
+  Manufacturer LIKE 'M%'
 "
 
 # Filter df
@@ -71,7 +71,9 @@ FROM
 GROUP BY
   Manufacturer
 ORDER BY
-  Avg_Price DESC;
+  Avg_Price DESC
+LIMIT
+  10;
 "
 
 # Aggregate df
