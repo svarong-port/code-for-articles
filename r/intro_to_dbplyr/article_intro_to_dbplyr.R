@@ -49,11 +49,16 @@ album_info <- tracks |>
   # Sort by duration
   arrange(desc(mean_millisec))
 
+
 # Show query
 show_query(album_info)
 
+
 # Get result
-collect(album_info)
+album_info_tb <- collect(album_info)
+
+# View the result
+album_info_tb
 
 
 # Disconnect from database
