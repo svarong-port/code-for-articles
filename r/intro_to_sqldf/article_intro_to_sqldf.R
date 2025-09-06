@@ -2,16 +2,18 @@
 
 # Install packages
 install.packages("sqldf")
+install.packages("MASS")
 
 # Load packages
 library(sqldf)
+library(MASS)
 
 
 # Load the dataset
 data(Cars93)
 
-# Preview the dataset
-head(Cars93)
+# View the dataset structure
+str(Cars93)
 
 
 
