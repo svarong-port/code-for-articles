@@ -21,8 +21,17 @@ tables = inspector.get_table_names()
 print(tables)
 
 
+# Get the table
+
+# Set the query
+brazil_customers_query = """
+SELECT FirstName, LastName, Phone, Email
+FROM Customer
+WHERE Country = 'Brazil';
+"""
+
 # Query the database
-df_customers = pd.read_sql("SELECT * FROM customers", engine)
+df = pd.read_sql(brazil_customers_query, engine)
 
 # View the df
-df_customers.head(10)
+print(df)
