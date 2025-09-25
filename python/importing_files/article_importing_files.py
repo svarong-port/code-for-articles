@@ -7,19 +7,36 @@ with open("example.txt", "x") as file:
     file.write("This is the second line.\n")
     file.write("This is the third line.")
 
-# Read a file - all
+
+# Read the file - all
 with open("example.txt", "r") as file:
     file.read()
 
-# Read a file - one line at a time
+# Read the file - one line at a time
 with open("example.txt", "r") as file:
     file.readline()
     file.readline()
+
+# Read the file - line by line
+with open("example.txt", "r") as file:
     
-# Add content to a file
+    # Loop through each line
+    for line in file:
+        print(line)
+    
+    
+# Add content to the file
 with open("example.txt", "a") as file:
     file.write("This is the fourth line.")
 
-# Overwrite a file
+
+# Overwrite the file
 with open("example.txt", "w") as file:
     file.write("This is all there is now.")
+
+
+# Import os module
+import os
+
+# Delete the file
+os.remove("example.txt")
