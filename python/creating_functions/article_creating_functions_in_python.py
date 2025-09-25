@@ -80,7 +80,7 @@ print(f"Basket 2: {total_price(100, 200, 300)}")
 # Create a function to return user's data
 def user_profile(**user_data):
     return user_data
-
+        
 # Examples
 print(f"User 1: {user_profile(name='John')}")
 print(f"User 2: {user_profile(name='Jane', gender='F', age=20)}")
