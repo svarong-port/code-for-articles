@@ -1,7 +1,0 @@
-CustomerID;Name;Age;Gender;Spend;JoinDate
-C001;John Smith;34;M;250.50;2021-05-14
-C002;Alice Johnson;28;F;300.00;2020-11-02
-C003;Bob Lee;45;M;150.75;2019-08-23
-C004;Maria Garcia;39;F;400.20;2021-01-09
-C005;David Wong;22;M;120.00;2022-07-30
-C006;Sophia Brown;31;F;220.10;2020-03-12
