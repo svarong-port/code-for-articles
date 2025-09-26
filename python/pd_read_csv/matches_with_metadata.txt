@@ -1,0 +1,9 @@
+# UK Football Matches Data
+# Created for practice with pd.read_csv
+MatchID,HomeTeam,AwayTeam,HomeGoals,AwayGoals,MatchDate
+M001,Manchester United,Chelsea,2,1,2024-08-14
+M002,Liverpool,Arsenal,1,1,2024-08-20
+M003,Tottenham,Everton,3,0,2024-09-02
+M004,Man City,Aston Villa,4,2,2024-09-15
+M005,Newcastle,West Ham,0,0,2024-09-22
+M006,Brighton,Leeds,2,3,2024-09-29
