@@ -15,14 +15,16 @@ library(dbplyr)
 
 
 # Connect to database
-con <- dbConnect(RSQLite::SQLite(), "chinook.sqlite")
+con <- dbConnect(RSQLite::SQLite(),
+                 "chinook.sqlite")
 
 # View all tables
 dbListTables(con)
 
 
 # Create lazy tibble
-tracks <- tbl(con, "Track")
+tracks <- tbl(con,
+              "Track")
 
 # View tibble
 tracks
@@ -41,7 +43,8 @@ album_info <- tracks |>
     tracks = n(),
     
     # Average duration
-    mean_millisec = mean(Milliseconds, na.rm = TRUE),
+    mean_millisec = mean(Milliseconds,
+                         na.rm = TRUE),
     
     # Total size
     total_bytes = sum(Bytes)
