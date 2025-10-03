@@ -1,2 +1,2 @@
 # code-for-articles
-Contains code for WordPress posts: https://wordpress.com/posts/shinoshigoto.com
+Contains code for my WordPress posts which you can find here: [https://wordpress.com/posts/shinoshigoto.com](https://shinoshigoto.wordpress.com/blog/)
