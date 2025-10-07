@@ -116,9 +116,7 @@ flights[, list(origin, dest, air_time)]
 flights[, .(origin, dest, air_time)]
 
 ### 2.1.5 Selecting multiple columns with ..
-
 cols <- c("origin", "dest", "air_time")
-
 flights[, ..cols]
 
 ### 2.1.6 Deselecting
@@ -160,12 +158,6 @@ head(flights)
 
 ## 3.1 Group by 1 column
 flights[, mean(dep_delay), by = origin]
-
-flights[order(origin), mean(dep_delay), by = origin]
-
-flights[, mean(dep_delay), by = origin][order(origin)]
-
-flights[, mean(dep_delay), keyby = origin]
 
 ## 3.2 Group by multiple columns
 flights[, mean(dep_delay), by = c("origin", "dest")]
