@@ -1,0 +1,14 @@
+[
+  {
+    "Name": ["Choco Chip"],
+    "Brand": ["CookieJar"],
+    "Price": [50],
+    "Vegan": [false]
+  },
+  {
+    "Name": ["Oatmeal"],
+    "Brand": ["HealthyBite"],
+    "Price": [45],
+    "Vegan": [true]
+  }
+]

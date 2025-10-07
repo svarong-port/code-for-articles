@@ -1,0 +1,12 @@
+[
+  {
+    "Item": "Popcorn",
+    "Flavor": "Caramel",
+    "Price": 35
+  },
+  {
+    "Item": "Rice Cracker",
+    "Flavor": "Seaweed",
+    "Price": 25
+  }
+]
