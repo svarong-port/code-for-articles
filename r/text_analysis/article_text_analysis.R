@@ -97,7 +97,11 @@ reviews_wider <- reviews_counts |>
   
   # Pivot
   pivot_wider(
+    
+    # Set name column
     names_from = sentiment,
+    
+    # Set value column
     values_from = n
   )
 
