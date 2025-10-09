@@ -22,10 +22,16 @@ reviews <- read_csv("all_kindle_review.csv", # from: https://www.kaggle.com/data
 head(reviews)
 
 
-# Unnest tokens
+# Tokenise words
 reviews_unnested <- reviews |> 
+  
+  # Unnest
   unnest_tokens(
+    
+    # Set output
     output = "word",
+    
+    # Set input
     input = "reviewText"
   )
 
