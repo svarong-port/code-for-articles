@@ -2,10 +2,10 @@
 
 
 # Install packages
-install.packages("tidyverse")
-install.packages("tidytext")
-install.packages("textdata")
-install.packages("wordcloud")
+install.packages("tidyverse") # for data manipulation and viz
+install.packages("tidytext") # for text analysis
+install.packages("textdata") # for sentiment dict
+install.packages("wordcloud") # for word cloud
 
 # Load pacakages
 library(tidyverse)
