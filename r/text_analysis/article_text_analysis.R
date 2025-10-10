@@ -198,7 +198,7 @@ reviews_sentiments |>
   
   # Add labels
   labs(
-    title = "Top 20 Positive Words",
+    title = "Top 20 Negative Words",
     x = "Word",
     y = "Average Sentiment"
   )
