@@ -14,16 +14,21 @@ library(textdata)
 library(wordcloud)
 
 
-# Load the dataset
-reviews <- read_csv("all_kindle_review.csv", # from: https://www.kaggle.com/datasets/meetnagadia/amazon-kindle-book-review-for-sentiment-analysis?resource=download&select=all_kindle_review+.csv
-                    col_select = reviewText) # Load only `reviewText` column
+# Datset from
+# URL: https://www.kaggle.com/datasets/meetnagadia/amazon-kindle-book-review-for-sentiment-analysis?resource=download&select=all_kindle_review+.csv
+# Downloaded: 09 Oct 2025
 
-# Preview the dataset
+
+# Load the dataset
+reviews <- read_csv("all_kindle_review.csv",
+                    col_select = c(rating, reviewText))
+
+# View the result
 head(reviews)
 
 
 # Tokenise words
-reviews_unnested <- reviews |> 
+reviews_tokenised <- reviews |> 
   
   # Unnest
   unnest_tokens(
@@ -35,6 +40,9 @@ reviews_unnested <- reviews |>
     input = "reviewText"
   )
 
+# View the result
+head(reviews_tokenised)
+
 
 # Remove stop words
 
@@ -42,10 +50,13 @@ reviews_unnested <- reviews |>
 data(stop_words)
 
 # Remove stop words from reviews
-reviews_no_stopwords <- reviews_unnested |>
+reviews_no_stopwords <- reviews_tokenised |>
   
   # Anti join with `stop_words`
   anti_join(stop_words)
+
+# View the result
+head(reviews_no_stopwords)
 
 
 # Create word cloud
@@ -56,6 +67,9 @@ reviews_freq <- reviews_no_stopwords |>
   
   # Sort descending
   arrange(desc(n))
+
+# View the result
+head(reviews_freq)
 
 
 # Create word cloud
@@ -68,7 +82,7 @@ wordcloud(
   freq = reviews_freq$n,
   
   # Set minimum frequency
-  min.freq = 500
+  min.freq = 400
 )
 
 
@@ -76,74 +90,115 @@ wordcloud(
 reviews_sentiments <- reviews_no_stopwords |>
   
   # Inner join with sentiment dictionary
-  inner_join(get_sentiments("bing"))
+  inner_join(get_sentiments("afinn"))
 
 # View the result
 head(reviews_sentiments)
 
 
-# Count words by sentiment
-reviews_counts <- reviews_sentiments |>
+# Summarise sentiment by rating
+reviews_sentiments |>
   
-  # Count by words and sentiment
-  count(word, sentiment)
-
-# View the result
-head(reviews_counts)
-
-
-# Pivot wider
-reviews_wider <- reviews_counts |>
-  
-  # Pivot
-  pivot_wider(
-    
-    # Set name column
-    names_from = sentiment,
-    
-    # Set value column
-    values_from = n
-  )
-
-# View the result
-head(reviews_wider)
-
-
-# Replace NA
-reviews_no_na <- reviews_wider |>
-  
-  # Replace NA
-  replace_na(list(negative = 0, 
-                  positive = 0))
-
-
-# Compute overall sentiment
-reviews_no_na |> 
+  # Group by rating
+  group_by(rating) |>
   
   # Compute overall sentiment
-  mutate(overall_sentiment = positive - negative) |>
+  summarise(mean_sentiment = mean(value)) |>
   
-  # Get top 20
-  slice_max(overall_sentiment, n = 20) |>
-  
-  # Visualise
-  ggplot(aes(x = fct_reorder(word, overall_sentiment),
-             y = overall_sentiment,
-             fill = word)
+  # Visualise the result
+  ggplot(aes(
+    x = factor(rating),
+    y = mean_sentiment,
+    fill = factor(rating)
+  )
   ) +
   
-  # Set bar plot
+  # Set geom
   geom_col(show.legend = FALSE) +
   
-  # Flip axis
+  # Flip axes
   coord_flip() +
   
-  # Set theme as minimal
+  # Set theme
   theme_minimal() +
   
   # Add labels
   labs(
-    title = "Top 20 Sentiment Words",
-    x = "Words",
-    y = "Overall Sentiment"
+    title = "Sentiment by Product Rating",
+    x = "Rating",
+    y = "Average Sentiment"
+  )
+
+
+# Find top 20 positive words
+reviews_sentiments |>
+  
+  # Group by word
+  group_by(word) |>
+  
+  # Find mean sentiment
+  summarise(mean_sentiment = mean(value)) |>
+  
+  # Get top 20 words
+  slice_max(mean_sentiment, n = 20, with_ties = FALSE) |>
+  
+  # Visualise the result
+  ggplot(aes(
+    x = fct_reorder(word, mean_sentiment),
+    y = mean_sentiment,
+    fill = word
+  )
+  ) +
+  
+  # Set geom
+  geom_col(show.legend = FALSE) +
+  
+  # Flip axes
+  coord_flip() +
+  
+  # Set theme
+  theme_minimal() +
+  
+  # Add labels
+  labs(
+    title = "Top 20 Positive Words",
+    x = "Word",
+    y = "Average Sentiment"
+  )
+
+
+# Find top 20 negative words
+reviews_sentiments |>
+  
+  # Group by word
+  group_by(word) |>
+  
+  # Find mean sentiment
+  summarise(mean_sentiment = mean(value)) |>
+  
+  # Get top 20 words
+  slice_min(mean_sentiment, n = 20, with_ties = FALSE) |>
+  
+  # Visualise the result
+  ggplot(aes(
+    x = fct_reorder(word, mean_sentiment),
+    y = mean_sentiment,
+    fill = word
+  )
+  ) +
+  
+  # Set geom
+  geom_col(show.legend = FALSE) +
+  
+  # Flip axes
+  coord_flip() +
+  
+  # Set theme
+  theme_minimal() +
+  
+  # Add labels
+  labs(
+    title = "Top 20 Positive Words",
+    x = "Word",
+    y = "Average Sentiment"
   )
