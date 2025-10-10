@@ -4,15 +4,19 @@
 # 1. def syntax
 
 # Create a function that calculates BMI
-def bmi_cal(height, weight):
+def calculate_bmi(weight, height):
+
     # Calculate BMI
     bmi = weight / (height ** 2)
 
-    # Return BMI (round to 2 decimals)
-    return round(bmi, 2)
+    # Round to 2 decimals
+    bmi_rounded = round(bmi, 2)
+
+    # Return BMI
+    return bmi_rounded
 
 # Use the BMI calculator function
-my_bmi = bmi_cal(height=1.8, weight=80)
+my_bmi = calculate_bmi(weight=80, height=1.8)
 
 # Print the result
 print(my_bmi)
@@ -24,25 +28,31 @@ print(my_bmi)
 # 2. Docstring
 
 # Using incorrect input
-wrong_bmi = bmi_cal(height=180, weight=80)
+wrong_bmi = calculate_bmi(height=180, weight=80)
 
 # Print the result
 print(wrong_bmi)
 
 # Adding docstring to the function
-def bmi_cal(height, weight):
+def calculate_bmi(height, weight):
+
     # Docstring
     """
-    Calculate BMI using height and weight:
-    - height: metre
-    - weight: kg
+    Calculate BMI using weight and height:
+    - Weight: kg
+    - Height: m
+
+    Return BMI rounded to 2 decimals
     """
 
     # Calculate BMI
     bmi = weight / (height ** 2)
 
-    # Return BMI (round to 2 decimals)
-    return round(bmi, 2)
+    # Round to 2 decimals
+    bmi_rounded = round(bmi, 2)
+
+    # Return BMI
+    return bmi_rounded
 
 # ----------------------------------------------------
 
@@ -52,14 +62,19 @@ def bmi_cal(height, weight):
 # 3.1 Default arguments
 
 # Create a function with default arguments
-def power(x, n=2):
-    return x ** n
+def calculate_power(number, power=2):
 
-# Call the function without n
-print(power(5))
+    # Calculate number to the power of power
+    result = number ** power
 
-# Call the function with n
-print(power(5, 3))
+    # Return result
+    return result
+
+# Call the function without power
+print(calculate_power(5))
+
+# Call the function with power
+print(calculate_power(5, 3))
 
 
 # 3.2 Arbitary arguments
@@ -67,12 +82,20 @@ print(power(5, 3))
 # *args
 
 # Create a function calculate total price
-def total_price(*prices):
-    return sum(prices)
+def calculate_total_price(*prices):
+
+    # Calculate sum
+    total = sum(prices)
+
+    # Return total
+    return total
 
 # Examples
-print(f"Basket 1: {total_price(500, 1000)}")
-print(f"Basket 2: {total_price(100, 200, 300)}")
+total_basket_01 = calculate_total_price(500, 1000)
+total_basket_02 = calculate_total_price(100, 200, 300)
+
+print(f"Basket 1: {total_basket_01}")
+print(f"Basket 2: {total_basket_02}")
 
 
 # **kargs
@@ -92,12 +115,12 @@ print(f"User 2: {user_profile(name='Jane', gender='F', age=20)}")
 # 4. lambda
 
 # Create a function using lambda
-x = lambda a, b: a + b
+addition = lambda a, b: a + b
 
-# Call x
-print(x(1, 1))
+# Call addition
+print(addition(1, 1))
 
 
 # Same as lambda
-def x(a, b):
+def addition(a, b):
     return a + b
