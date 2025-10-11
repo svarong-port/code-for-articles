@@ -28,7 +28,7 @@ print(my_bmi)
 # 2. Docstring
 
 # Using incorrect input
-wrong_bmi = calculate_bmi(height=180, weight=80)
+wrong_bmi = calculate_bmi(weight=80, height=180)
 
 # Print the result
 print(wrong_bmi)
