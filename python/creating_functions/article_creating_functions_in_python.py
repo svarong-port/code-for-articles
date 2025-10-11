@@ -54,6 +54,12 @@ def calculate_bmi(height, weight):
     # Return BMI
     return bmi_rounded
 
+# Read docstring with help()
+help(calculate_bmi)
+
+# Read docstring with .__doc__:
+print(calculate_bmi.__doc__)
+
 # ----------------------------------------------------
 
 
