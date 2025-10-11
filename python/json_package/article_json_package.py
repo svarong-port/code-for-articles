@@ -4,45 +4,91 @@
 # Import json
 import json
 
+# Import pprint
+from pprint import pprint
+
+
+# -------------------------------------
+
+
+# 1. json.loads()
+
+# Create a JSON string
+cookie_json_string = """
+{
+    "customer": "Luna",
+    "cookies": [
+        "Chocolate Chip",
+        "Oatmeal",
+        "Sugar"
+    ],
+    "is_member": true,
+    "total_price": 120
+}
+"""
+
+# Convert to Python object
+cookie_python_dict = json.loads(cookie_json_string)
+
+# View the result
+pprint(cookie_python_dict)
+
+
+# -------------------------------------
+
+
+# 2. json.dumps()
+
 # Create a Python dict
-cookies = {
-    "name": "Chocolate Chip",
-    "flavor": "chocolate",
-    "price": 1.5,
-    "ingredients": ["flour", "butter", "sugar", "chocolate chips"],
-    "is_gluten_free": False
+cookie_py_dict = {
+    "customer": "Luna",
+    "cookies": [
+        "Chocolate Chip",
+        "Oatmeal",
+        "Sugar"
+    ],
+    "is_member": True,
+    "total_price": 120
 }
 
-
-# json.dumps(): Python dict to JSON string
-cookies_json_str = json.dumps(cookies)
-
-# View the result
-print(cookies_json_str)
-
-
-# json.dumps() with indent
-cookies_json_str = json.dumps(cookies, indent=4)
+# Convert to JSON string
+cookie_json_str = json.dumps(cookie_py_dict)
 
 # View the result
-print(cookies_json_str)
+print(cookie_json_str)
 
 
-# json.loads(): JSON string to Python dict
-cookies_dict = json.loads(cookies_json_str)
-
-# View the result
-print(cookies_dict)
+# -------------------------------------
 
 
-# json.dump(): Python dict to JSON file
-with open("cookies.json", "x") as file:
-    json.dump(cookies_dict, file, indent=4)
-
-
-# json.load(): JSON file to Python dict
-with open("cookies.json", "r") as file:
-    cookies_dict_from_file = json.load(file)
+# Convert to JSON string with indent argument
+cookie_json_str_indent = json.dumps(cookie_py_dict, indent=4)
 
 # View the result
-print(cookies_dict_from_file)
+print(cookie_json_str_indent)
+
+
+# -------------------------------------
+
+
+# json.load()
+
+# Load JSON data
+with open("cookie_order.json", "r") as file:
+    cookie_order = json.load(file)
+
+# View the result
+pprint(cookie_order)
+
+
+# -------------------------------------
+
+
+# 4. json.dump()
+
+# Update status
+cookie_order["status"] = "on the way"
+
+# Write to JSON file
+with open("cookie_order_updated_indent.json", "w") as file:
+    json.dump(cookie_order, file, indent=2)
