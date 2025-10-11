@@ -71,10 +71,10 @@ def calculate_power(number, power=2):
     return result
 
 # Call the function without power
-print(calculate_power(5))
+print(calculate_power(10))
 
 # Call the function with power
-print(calculate_power(5, 3))
+print(calculate_power(10, 3))
 
 
 # 3.2 Arbitary arguments
