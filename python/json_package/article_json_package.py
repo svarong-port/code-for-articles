@@ -16,7 +16,7 @@ from pprint import pprint
 # Create a JSON string
 cookie_json_string = """
 {
-    "customer": "Luna",
+    "customer": "May",
     "cookies": [
         "Chocolate Chip",
         "Oatmeal",
@@ -41,7 +41,7 @@ pprint(cookie_python_dict)
 
 # Create a Python dict
 cookie_py_dict = {
-    "customer": "Luna",
+    "customer": "May",
     "cookies": [
         "Chocolate Chip",
         "Oatmeal",
@@ -86,8 +86,8 @@ pprint(cookie_order)
 
 # 4. json.dump()
 
-# Update status
-cookie_order["status"] = "on the way"
+# Update name
+cookie_order["customer"]["name"] = "Peter Parker"
 
 # Write to JSON file
 with open("cookie_order_updated_indent.json", "w") as file:
