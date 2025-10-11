@@ -1,0 +1,27 @@
+{
+    "order_id": 2048,
+    "customer": {
+        "name": "Mina Park",
+        "phone": "+66 92 888 4321"
+    },
+    "items": [
+        {
+            "product": "Double Chocolate Cookie",
+            "size": "Large",
+            "price": 55,
+            "quantity": 2
+        },
+        {
+            "product": "Almond Biscotti",
+            "price": 45,
+            "quantity": 3
+        }
+    ],
+    "payment": {
+        "method": "Credit Card",
+        "total": 285,
+        "currency": "THB"
+    },
+    "status": "Baking",
+    "timestamp": "2025-10-11T10:15:00"
+}
