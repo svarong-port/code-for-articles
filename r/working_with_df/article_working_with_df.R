@@ -160,7 +160,7 @@ jjk_df
 jjk_df <- cbind(
   jjk_df,
   IsTeacher = c(FALSE, FALSE, FALSE, TRUE, FALSE,
-                FALSE, FALSE, TRUE, FALSE, TRUE, TRUE)
+                FALSE, FALSE, TRUE, FALSE, TRUE, FALSE)
 )
 
 jjk_df
