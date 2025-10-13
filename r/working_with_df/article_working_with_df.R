@@ -107,6 +107,9 @@ jjk_df[order(jjk_df$Missions, decreasing = TRUE), ]
 
 jjk_df[order(-jjk_df$Missions), ]
 
+# 6.3 Sort by multiple columns
+jjk_df[order(jjk_df$Grade, jjk_df$Missions), ]
+
 
 # -----------------------------------------------------------------
 
