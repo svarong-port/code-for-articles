@@ -1,128 +1,163 @@
 # Working With Data Frames in R
 
 
-# 1. Creating
-friends_df <- data.frame(
-  Name = c("Alice", "Ben", "Chloe", "David", "Ella",
-           "Frank", "Grace", "Hugo", "Ivy", "Jack"),
-  Age = c(25, 27, 24, 26, 28,
-          29, 23, 30, 25, 27),
-  City = c("Bangkok", "Chiang Mai", "Bangkok", "Phuket", "Chiang Mai",
-           "Bangkok", "Phuket", "Bangkok", "Chiang Mai", "Phuket"),
-  Coffee = c(450, 300, 600, 200, 500,
-             550, 150, 400, 480, 250),
-  Food = c(2500, 1800, 2700, 2200, 2400,
-           2600, 1900, 3100, 2300, 2000),
-  Entertainment = c(800, 1200, 500, 1000, 700,
-                    900, 400, 1500, 600, 950)
+# 1. Creating a data frame
+jjk_df <- data.frame(
+  ID = 1:10,
+  Name = c("Yuji Itadori", "Megumi Fushiguro", "Nobara Kugisaki", "Satoru Gojo",
+           "Maki Zenin", "Toge Inumaki", "Panda", "Kento Nanami", "Yuta Okkotsu", "Suguru Geto"),
+  Age = c(15, 16, 16, 28, 17, 17, 18, 27, 17, 27),
+  Grade = c("1st Year", "1st Year", "1st Year", "Special", "2nd Year",
+            "2nd Year", "2nd Year", "Special", "Special", "Special"),
+  CursedEnergy = c(80, 95, 70, 999, 60, 85, 75, 200, 300, 400),
+  Technique = c("Divergent Fist", "Ten Shadows", "Straw Doll", "Limitless",
+                "Heavenly Restriction", "Cursed Speech", "Gorilla Mode",
+                "Ratio Technique", "Rika", "Cursed Spirit Manipulation"),
+  Missions = c(25, 30, 20, 120, 35, 28, 40, 90, 55, 80)
 )
 
-friends_df
+jjk_df
+
+View(jjk_df)
+
+
+# -----------------------------------------------------------------
 
 
 # 2. Previewing
 
 # 2.1 head()
-head(friends_df)
+head(jjk_df)
 
 # 2.2 tail()
-tail(friends_df)
+tail(jjk_df)
 
-# 2.3 summary()
-summary(friends_df)
+# 2.3 str()
+str(jjk_df)
 
-# 2.4 str()
-str(friends_df)
+# 2.4 summary()
+summary(jjk_df)
 
 # 2.5 dim()
-dim(friends_df)
+dim(jjk_df)
 
 # 2.6 nrow()
-nrow(friends_df)
+nrow(jjk_df)
 
 # 2.7 ncol()
-ncol(friends_df)
+ncol(jjk_df)
 
+
+# -----------------------------------------------------------------
 
 
 # 3. Indexing
 
 # 3.1 $
-friends_df$Name
+jjk_df$Name
 
 # 3.2 [[]]
-friends_df[["Name"]]
+jjk_df[["Name"]]
 
+
+# -----------------------------------------------------------------
 
 
 # 4. Subsetting
 
 # 4.1 df[rows, cols]
-friends_df[1:3, c("Name", "City")]
+jjk_df[1:5, ]
+
+jjk_df[, "Name"]
+
+jjk_df[1:5, c("Name", "Technique")]
 
 # 4.2 subset()
-subset(friends_df[1:3, ], select = c("Name", "City"))
+subset(jjk_df, select = c("Name", "Technique"))
 
+subset(jjk_df[1:5, ], select = c("Name", "Technique"))
+
+
+# -----------------------------------------------------------------
 
 
 # 5. Filtering
 
 # 5.1 df[rows, cols]
-friends_df[friends_df$City == "Bangkok", ]
+jjk_df[jjk_df$Grade == "1st Year", ]
 
-friends_df[friends_df$City == "Bangkok" & friends_df$Food > 2500, ]
+jjk_df[jjk_df$Grade == "1st Year" & jjk_df$Age == 15, ]
 
 # 5.2 subset()
-subset(friends_df, City == "Bangkok")
+subset(jjk_df, Grade == "1st Year")
 
-subset(friends_df, City == "Bangkok" & friends_df$Food > 2500)
+subset(jjk_df, Grade == "1st Year" & Age == 15)
 
+
+# -----------------------------------------------------------------
 
 
 # 6. Sorting
 
 # 6.1 Ascending
-friends_df[order(friends_df$Age), ]
+jjk_df[order(jjk_df$Missions), ]
 
 # 6.2 Descending
-friends_df[order(friends_df$Age, decreasing = TRUE), ]
+jjk_df[order(jjk_df$Missions, decreasing = TRUE), ]
 
-friends_df[order(-friends_df$Age), ]
+jjk_df[order(-jjk_df$Missions), ]
 
+
+# -----------------------------------------------------------------
 
 
 # 7. Aggregating
-mean(friends_df$Entertainment)
+mean(jjk_df$CursedEnergy)
 
+
+# -----------------------------------------------------------------
 
 
 # 8. Adding columns
-friends_df["Total"] <- friends_df$Coffee + friends_df$Food + friends_df$Entertainment
+jjk_df$Ranking <- ifelse(jjk_df$CursedEnergy > 100, "High", "Low")
 
+jjk_df
+
+
+# -----------------------------------------------------------------
 
 
 # 9. Removing columns
-friends_df["Total"] <- NULL
+jjk_df$Ranking <- NULL
 
+jjk_df
+
+
+# -----------------------------------------------------------------
 
 
 # 10. Binding
 
 # 10.1 rbind()
-new_friend <- data.frame(
-  Name = "Ken",
-  Age = 29,
-  City = "Bangkok",
-  Coffee = 550,
-  Food = 2600,
-  Entertainment = 900
+new_sorcerer <- data.frame(
+  ID = 11,
+  Name = "Hajime Kashimo",
+  Age = 25,
+  Grade = "Special",
+  CursedEnergy = 500,
+  Technique = "Lightning",
+  Missions = 60
 )
 
-friends_df <- rbind(friends_df, new_friend)
+jjk_df <- rbind(jjk_df, new_sorcerer)
+
+jjk_df
 
 # 10.2 cbind()
-friends_df <- cbind(friends_df,
-                    DrinksAlcohol = c(TRUE, TRUE, FALSE, FALSE, TRUE,
-                                      TRUE, FALSE, FALSE, TRUE, TRUE, TRUE))
+jjk_df <- cbind(
+  jjk_df,
+  IsTeacher = c(FALSE, FALSE, FALSE, TRUE, FALSE,
+                FALSE, FALSE, TRUE, FALSE, TRUE, TRUE)
+)
 
-friends_df
+jjk_df
