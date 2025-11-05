@@ -53,21 +53,35 @@ snacks_df <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Convert to JSON
-snacks_json_string <- toJSON(snacks_df, pretty = TRUE)
+# Convert to JSON string
+snacks_json_string <- toJSON(snacks_df)
 
-# View the JSON
+# View the JSON string
 snacks_json_string
+
+# Convert to JSON string (pretty)
+snacks_json_string_pretty <- toJSON(snacks_df,
+                                    pretty = TRUE)
+
+# View the JSON string (pretty)
+snacks_json_string_pretty
 
 
 
 # 3. Read JSON: read_json()
 
-# Read JSON
+# Read the JSON file
 snacks_from_json_file <- read_json("snacks.json")
 
-# View the df
+# View the result
 snacks_from_json_file
+
+# Read the JSON file (simplified)
+snacks_from_json_file_simplified <- read_json("snacks.json",
+                                              simplifyVector = TRUE)
+
+# View the result (simplified)
+snacks_from_json_file_simplified
 
 
 
@@ -84,5 +98,9 @@ snacks_list <- data.frame(
 
 # Write to JSON
 write_json(snacks_list,
-           "snacks_list.json", 
+           "snacks_list.json")
+
+# Write to JSON (pretty)
+write_json(snacks_list,
+           "snacks_list_pretty.json", 
            pretty = TRUE)
