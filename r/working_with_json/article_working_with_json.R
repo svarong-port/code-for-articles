@@ -11,19 +11,34 @@ library(jsonlite)
 # 1. JSON to R: fromJSON()
 
 # Create a JSON string
-json_string <- '
+snacks_json_string <- '
 [
-  {"Name": "Chocolate Bar", "Brand": "SweetNest", "Price": 40, "Type": "Milk"},
-  {"Name": "Gummy Bears", "Brand": "BearBites", "Price": 35, "Type": "Fruit"},
-  {"Name": "Marshmallow", "Brand": "Softy", "Price": 28, "Type": "Vanilla"}
+  {
+    "snack_name": "Corn Chips",
+    "brand": "Nibble & Dip",
+    "price_usd": 2.99,
+    "is_vegan": true
+  },
+  {
+    "snack_name": "Pita Chips",
+    "brand": "DipMates",
+    "price_usd": 4.25,
+    "is_vegan": false
+  },
+  {
+    "snack_name": "Tortilla Chips",
+    "brand": "Casa Crunch",
+    "price_usd": 3.49,
+    "is_vegan": true
+  }
 ]
 '
 
 # Convert to R object
-candies_df <- fromJSON(json_string)
+snacks_r_obj <- fromJSON(snacks_json_string)
 
 # View the df
-candies_df
+snacks_r_obj
 
 
 
@@ -31,41 +46,43 @@ candies_df
 
 # Create a data frame
 snacks_df <- data.frame(
-  SnackID = 1:5,
-  Name = c("Potato Chips", "Tortilla Chips", "Nachos", "Popcorn", "Pretzels"),
-  Brand = c("CrispyCo", "TastyTreats", "NachoKing", "PopJoy", "Twist&Bite"),
-  Flavor = c("Original", "Cheese", "Spicy Jalapeño", "Butter", "Salted"),
-  Price = c(35.00, 40.00, 45.00, 30.00, 28.00),
-  IsVegan = c(TRUE, TRUE, FALSE, TRUE, TRUE)
+  snack_name = c("Seaweed Thins", "Chickpea Puffs", "BBQ Potato Crisps"),
+  brand      = c("OceanBite", "LegumeLab", "Spud & Spark"),
+  price_usd  = c(2.45, 3.35, 3.10),
+  is_vegan   = c(TRUE, TRUE, FALSE),
+  stringsAsFactors = FALSE
 )
 
 # Convert to JSON
-snacks_json <- toJSON(snacks_df, pretty = TRUE)
+snacks_json_string <- toJSON(snacks_df, pretty = TRUE)
 
 # View the JSON
-snacks_json
+snacks_json_string
 
 
 
 # 3. Read JSON: read_json()
 
 # Read JSON
-snack_box_df <- read_json("snack_box.json")
+snacks_from_json_file <- read_json("snacks.json")
 
 # View the df
-snack_box_df
+snacks_from_json_file
 
 
 
 # 4. Write to JSON: write_json()
 
 # Create a list
-cookies <- list(
-  list(Name = "Choco Chip", Brand = "CookieJar", Price = 50, Vegan = FALSE),
-  list(Name = "Oatmeal", Brand = "HealthyBite", Price = 45, Vegan = TRUE)
+snacks_list <- data.frame(
+  snack_name = c("Cassava Chips", "Lentil Crisps", "Cheese Puffs"),
+  brand      = c("RootRush", "Pulse & Crunch", "CheezyPop"),
+  price_usd  = c(2.85, 2.65, 3.99),
+  is_vegan   = c(TRUE, TRUE, FALSE),
+  stringsAsFactors = FALSE
 )
 
 # Write to JSON
-write_json(cookies,
-           "cookies.json", 
+write_json(snacks_list,
+           "snacks_list.json", 
            pretty = TRUE)

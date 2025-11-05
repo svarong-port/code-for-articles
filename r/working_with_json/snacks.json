@@ -1,0 +1,20 @@
+[
+  {
+    "snack_name": "Plantain Chips",
+    "brand": "TropiBite",
+    "price_usd": 3.15,
+    "is_vegan": true
+  },
+  {
+    "snack_name": "Rice Crackers",
+    "brand": "ZenMunch",
+    "price_usd": 2.25,
+    "is_vegan": true
+  },
+  {
+    "snack_name": "Pretzel Sticks",
+    "brand": "Twist & Dip",
+    "price_usd": 3.75,
+    "is_vegan": true
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "snack_name": "Cassava Chips",
+    "brand": "RootRush",
+    "price_usd": 2.85,
+    "is_vegan": true
+  },
+  {
+    "snack_name": "Lentil Crisps",
+    "brand": "Pulse & Crunch",
+    "price_usd": 2.65,
+    "is_vegan": true
+  },
+  {
+    "snack_name": "Cheese Puffs",
+    "brand": "CheezyPop",
+    "price_usd": 3.99,
+    "is_vegan": false
+  }
+]
