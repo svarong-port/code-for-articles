@@ -1,0 +1,5 @@
+Line 1: This is a small text file.
+Line 2: It has exactly five lines.
+Line 3: Ideal for quick terminal tests.
+Line 4: Perfect for cat, head, and wc.
+Line 5: End of file.

@@ -1,0 +1,10 @@
+alice@gmail.com
+bob@gmail.com
+charlie@outlook.com
+diana@outlook.com
+eric@support.com
+frank@support.com
+grace@gmail.com
+henry@company.org
+irene@support.com
+jack@outlook.com

@@ -1,0 +1,178 @@
+PAGE 1
+======
+The terminal is one of humanity’s quieter inventions.
+No buttons. No icons. No comforting progress bars.
+Just text, waiting patiently for you to say something intelligent.
+
+Most people meet the terminal by accident.
+A tutorial told them to.
+A colleague said, “It’s faster.”
+A bug refused to die unless confronted at the command line.
+
+At first, it feels hostile.
+Why does it shout?
+Why does it fail silently?
+Why does one missing space ruin everything?
+
+But slowly, patterns emerge.
+Commands become sentences.
+Flags become adjectives.
+Pipelines become thoughts flowing from one idea to the next.
+
+--------------------------------------------------
+
+PAGE 2
+======
+Before graphical interfaces, there was only intention.
+You didn’t click.
+You described.
+
+“List the files.”
+“Move this there.”
+“Show me only the lines that matter.”
+
+The shell does not guess what you want.
+It executes exactly what you say.
+This makes it brutally honest—and incredibly powerful.
+
+Mistakes are not hidden.
+They are displayed, often immediately.
+And that, paradoxically, makes learning faster.
+
+--------------------------------------------------
+
+PAGE 3
+======
+Files are the atoms of computing.
+Small files form scripts.
+Scripts form tools.
+Tools form workflows.
+
+A data analyst eventually notices something:
+Most problems are not about algorithms.
+They are about *finding, filtering, and reshaping text*.
+
+Logs.
+CSV files.
+JSON blobs.
+System outputs.
+
+The shell thrives in this chaos.
+
+--------------------------------------------------
+
+PAGE 4
+======
+The `less` command exists because humans read differently from machines.
+Machines ingest entire files instantly.
+Humans skim.
+Pause.
+Search.
+Scroll backward.
+Reread.
+
+`less` respects that.
+It does not rush.
+It waits for your curiosity.
+
+Forward.
+Backward.
+Search.
+Quit.
+
+Nothing more.
+Nothing less.
+
+--------------------------------------------------
+
+PAGE 5
+======
+Try pressing:
+- `Space` to move forward
+- `b` to move backward
+- `/data` to search for a word
+- `n` to repeat a search
+- `q` to quit
+
+Notice how your hands start to remember.
+This is muscle memory forming.
+A quiet upgrade.
+
+--------------------------------------------------
+
+PAGE 6
+======
+Power tools often look unimpressive.
+A hammer is just metal and wood.
+A chisel is just sharp steel.
+A shell command is just text.
+
+But mastery hides in simplicity.
+
+People who fear the terminal often fear precision.
+The terminal demands clarity.
+Ambiguity is punished.
+Accuracy is rewarded.
+
+--------------------------------------------------
+
+PAGE 7
+======
+Eventually, the terminal stops feeling like a tool.
+It becomes a place.
+
+A workspace.
+A lab bench.
+A conversation partner that never interrupts
+and never forgets what you typed five seconds ago.
+
+History matters here.
+Literally.
+There is a `history` command.
+
+--------------------------------------------------
+
+PAGE 8
+======
+You will forget commands.
+Everyone does.
+That’s fine.
+
+What matters is understanding *what kind of problem* you are solving:
+- Navigating
+- Inspecting
+- Transforming
+- Automating
+
+The shell is less about memorization
+and more about composition.
+
+--------------------------------------------------
+
+PAGE 9
+======
+If graphical tools are like driving automatic cars,
+the shell is learning to drive manual.
+
+Harder at first.
+More stalls.
+More noise.
+
+But once learned,
+you feel the machine responding directly to your intent.
+
+--------------------------------------------------
+
+PAGE 10
+=======
+You have reached the end of this file.
+
+Or maybe not.
+Scroll back.
+Search for something you missed.
+Practice moving without thinking.
+
+When ready, press `q`.
+
+The terminal will be waiting next time.
+EOF
