@@ -1,7 +1,7 @@
 # Web Scraping with Beautiful Soup
 
 
-# Import libraries
+# Import packages
 import requests
 import bs4
 
