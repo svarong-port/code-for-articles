@@ -4,3 +4,4 @@
 .Ruserdata
 code-for-articles.Rproj
 .DS_Store
+.env
