@@ -88,7 +88,7 @@ snacks_from_json_file_simplified
 # 4. Write to JSON: write_json()
 
 # Create a list
-snacks_list <- data.frame(
+snacks_df <- data.frame(
   snack_name = c("Cassava Chips", "Lentil Crisps", "Cheese Puffs"),
   brand      = c("RootRush", "Pulse & Crunch", "CheezyPop"),
   price_usd  = c(2.85, 2.65, 3.99),
@@ -97,10 +97,10 @@ snacks_list <- data.frame(
 )
 
 # Write to JSON
-write_json(snacks_list,
-           "snacks_list.json")
+write_json(snacks_df,
+           "snacks_df.json")
 
 # Write to JSON (pretty)
-write_json(snacks_list,
-           "snacks_list_pretty.json", 
+write_json(snacks_df,
+           "snacks_df_pretty.json", 
            pretty = TRUE)
