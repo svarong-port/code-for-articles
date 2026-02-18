@@ -33,5 +33,5 @@ WHERE Country = 'Brazil';
 # Query the database
 df = pd.read_sql(brazil_customers_query, engine)
 
-# View the df
+# Display the df
 print(df)
