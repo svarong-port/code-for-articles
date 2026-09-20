@@ -2,7 +2,10 @@
 SELECT
     InvoiceId,
     Total,
-    (SELECT AVG(Total) FROM Invoice) AS Mean -- Subquery
+    (
+        SELECT AVG(Total)
+        FROM Invoice -- Subquery
+    ) AS Mean
 FROM Invoice;
 
 
@@ -57,7 +60,7 @@ WHERE Milliseconds > ( -- First subquery
     WHERE GenreId = ( -- Second subquery
         SELECT GenreId
         FROM Genre
-        WHERE Name = "Rock"
+        WHERE Name = 'Rock'
     )
 );
 
